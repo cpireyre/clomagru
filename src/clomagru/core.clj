@@ -9,9 +9,7 @@
   (:gen-class))
 
 (defroutes app-routes
-  (GET "/henlo" [] p/henlo)
-  (GET "/pics" [] p/illustrations)
-  (GET "/:num" [num :<< c/as-int] (p/sq num))
+  (GET "/" [] "coming soon")
   (route/not-found "<h1>404</h1>"))
 
 (def app

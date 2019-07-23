@@ -7,6 +7,8 @@
                  [ring "1.7.1"]
                  [ring/ring-defaults "0.3.2"]
                  [hiccup "1.0.5"]
+                 [seancorfield/next.jdbc "1.0.2"]
+                 [org.xerial/sqlite-jdbc "3.28.0"]
                  [compojure "1.6.1"]]
   :main ^:skip-aot clomagru.core
   :target-path "target/%s"
