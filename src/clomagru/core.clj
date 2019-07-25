@@ -15,19 +15,25 @@
    :email (get form-params "email")
    :password (get form-params "password")})
 
+(defn make-account [user-info]
+  (do
+    (let [credentials (destructure-form-input user-info)]
+      (db/create-account credentials)
+    (str "Created account for " (:username credentials) "."))))
+
 (defroutes app-routes
   (GET "/" [] "coming soon")
+  (GET "/list" [] (db/pretty-print-accounts))
   (GET "/register" [] (p/register-page))
-  (POST "/make-account" request (do
-                                  (db/create-account (destructure-form-input (:form-params request)))
-                                  "<h1>henlo</h1>"))
+  (POST "/make-account" req (make-account (:form-params req)))
   (route/not-found "<h1>404</h1>"))
 
 (def app
-  (wrap-defaults app-routes (assoc-in site-defaults [:security :anti-forgery] false)))
+  (wrap-defaults app-routes
+                 (assoc-in site-defaults [:security :anti-forgery] false)))
 
 (defn -main
   "I don't do a whole lot ... yet."
   [& args]
   (println "Starting server...")
-  (run-jetty (wrap-reload #'app) {:port 3000})) ;; live reload whilst developping
+  (run-jetty (wrap-reload #'app) {:port 3000})); live reload whilst developping

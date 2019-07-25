@@ -1,5 +1,6 @@
 (ns clomagru.db
   (:require [next.jdbc :as jdbc]
+            [clojure.pprint :refer [pprint]]
             [crypto.password.pbkdf2 :as password]))
 
 (def db {:dbtype "sqlite" :dbname "src/clomagru/db/database.db"})
@@ -42,4 +43,7 @@
                        "','" (password/encrypt password)
                        "','" (System/currentTimeMillis) "')")]))
 
-;(jdbc/execute! ds ["select * from accounts"])
+(defn pretty-print-accounts []
+  (str "<pre>"
+       (with-out-str (pprint (jdbc/execute! ds ["select * from accounts"])))
+       "</pre>"))
