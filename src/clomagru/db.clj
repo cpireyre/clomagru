@@ -29,8 +29,7 @@
 ;;  Wouldn't it be better to encrypt the password earlier in the process?
 ;;  Like, in the browser maybe, before it even gets sent via POST.
 ;;    There's also the question of which encryption to use. Quick research suggests
-;;  Argon2 but this crypto.password library seems alright. In truth, password
-;;  length rules all anyway.
+;;  Argon2 but this crypto.password library seems alright.
 
 (defn create-account [{:keys [username email password]}] ;; Maybe pass db as argument to this fn?
   (jdbc/execute! ds [(str
@@ -42,3 +41,5 @@
                        "','" email
                        "','" (password/encrypt password)
                        "','" (System/currentTimeMillis) "')")]))
+
+;(jdbc/execute! ds ["select * from accounts"])
