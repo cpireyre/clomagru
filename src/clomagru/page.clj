@@ -8,11 +8,10 @@
     [:label "Name: " [:input {:name "username" :value "guy garvey"}]] [:br]
     [:label "E-mail: " [:input {:name "email" :value "meme@meme.meme"}]] [:br]
     [:label "Password: " [:input {:name "password" :value "henlo"}]] [:br]
-    [:button "Submit"]
-    ]])
+    [:button "Submit"]]])
 
 (defn register-page []
-  (hiccup/html register-form))
+  (hiccup/html index register-form))
 
 (def index
   [:nav
@@ -23,3 +22,15 @@
 
 (defn index-page []
   (hiccup/html index))
+
+(defn print-one-user [user]
+  [:p [:em (:accounts/name user)]
+       " signed up on "
+       (str (java.util.Date. (:accounts/created_at user)))
+       "."])
+
+(defn list-accounts [accounts]
+  (hiccup/html
+    [:ol
+     (for [user accounts]
+       [:li (print-one-user user)])]))

@@ -23,7 +23,7 @@
 
 (defroutes app-routes
   (GET "/" [] (p/index-page))
-  (GET "/list" [] (db/pretty-print-accounts))
+  (GET "/list" [] (p/list-accounts (db/select-all-accounts)))
   (GET "/register" [] (p/register-page))
   (POST "/make-account" req (make-account (:form-params req)))
   (route/not-found "<h1>404</h1>"))

@@ -43,7 +43,10 @@
                        "','" (password/encrypt password)
                        "','" (System/currentTimeMillis) "')")]))
 
+(defn select-all-accounts []
+  (jdbc/execute! ds ["select * from accounts"]))
+
 (defn pretty-print-accounts []
   (str "<pre>"
-       (with-out-str (pprint (jdbc/execute! ds ["select * from accounts"])))
+       (with-out-str (pprint (select-all-accounts)))
        "</pre>"))
