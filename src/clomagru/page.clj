@@ -13,3 +13,13 @@
 
 (defn register-page []
   (hiccup/html register-form))
+
+(def index
+  [:nav
+   [:ul
+    [:li [:a {:href "list"} "See all users"]]
+    [:li [:a {:href "register"} "Sign up"]]
+    [:li [:a {:href "/"} "Index"]]]])
+
+(defn index-page []
+  (hiccup/html index))

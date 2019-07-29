@@ -22,7 +22,7 @@
     (str "Created account for " (:username credentials) "."))))
 
 (defroutes app-routes
-  (GET "/" [] "coming soon")
+  (GET "/" [] (p/index-page))
   (GET "/list" [] (db/pretty-print-accounts))
   (GET "/register" [] (p/register-page))
   (POST "/make-account" req (make-account (:form-params req)))
