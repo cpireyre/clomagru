@@ -1,6 +1,11 @@
 (ns clomagru.page
   (:require [hiccup.core :as hiccup]))
 
+(defn header [title]
+  [:head
+   [:title title]
+   [:link {:rel "stylesheet" :href "styles.css"}]])
+
 (def register-form
   [:form {:method "post" :action "make-account"}
    [:fieldset
@@ -10,27 +15,33 @@
     [:label "Password: " [:input {:name "password" :value "henlo"}]] [:br]
     [:button "Submit"]]])
 
-(defn register-page []
-  (hiccup/html index register-form))
-
-(def index
+(def nav-bar
   [:nav
    [:ul
     [:li [:a {:href "list"} "See all users"]]
     [:li [:a {:href "register"} "Sign up"]]
-    [:li [:a {:href "/"} "Index"]]]])
+    [:li [:a {:href "/"} "Index"]]]
+   [:hr]])
+
+(defn register-page []
+  (hiccup/html (header "Join Clomagru") nav-bar register-form))
 
 (defn index-page []
-  (hiccup/html index))
+  (hiccup/html (header "Clomagru home page") nav-bar
+               [:h1 "Clomagru"]
+               [:h2 "Coming soon."]))
 
 (defn print-one-user [user]
   [:p [:em (:accounts/name user)]
        " signed up on "
-       (str (java.util.Date. (:accounts/created_at user)))
+       [:time (str (java.util.Date. (:accounts/created_at user)))]
        "."])
 
 (defn list-accounts [accounts]
   (hiccup/html
+    (header "They use Clomagru")
+    nav-bar
+    [:h1 "People on this site"]
     [:ol
      (for [user accounts]
        [:li (print-one-user user)])]))

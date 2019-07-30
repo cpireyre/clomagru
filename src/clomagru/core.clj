@@ -33,7 +33,7 @@
                  (assoc-in site-defaults [:security :anti-forgery] false)))
 
 (defn -main
-  "I don't do a whole lot ... yet."
+  "Turns on web server."
   [& args]
   (println "Starting server...")
   (run-jetty (wrap-reload #'app) {:port 3000})); live reload whilst developping
