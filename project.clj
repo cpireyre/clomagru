@@ -18,8 +18,8 @@
   :profiles {:uberjar {:aot :all}}
   :plugins [[lein-cljsbuild "1.1.7"]]
   :cljsbuild {:builds [{:source-paths ["src-cljs"]
-                        :compiler {:output-to   "resources/public/app.js"
-                                   :output-dir  "resources/public/goog"
+                        :compiler {:output-dir  "resources/public/goog"
+                                   :output-to   "resources/public/app.js"
                                    :pretty-print true
                                    :asset-path  "goog"
                                    :main "clomagru-cljs.core"}}]})
