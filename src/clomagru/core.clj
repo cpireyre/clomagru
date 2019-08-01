@@ -38,5 +38,3 @@
   [& args]
   (println "Starting server...")
   (run-jetty (wrap-reload #'app) {:port 3000})); live reload whilst developping
-
-(clojure.pprint/pprint site-defaults)
