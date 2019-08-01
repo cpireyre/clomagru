@@ -19,8 +19,12 @@
   (GET "/camera"        []  (p/camera-page))
   (GET "/list"          []  (p/list-accounts (db/select-all-accounts)))
   (GET "/register"      []  (p/register-page))
-  (POST "/make-account" req (db/make-account (:form-params req)))
-  (POST "/upload-picc"  req (str "<pre>" (with-out-str (clojure.pprint/pprint req)) "</pre>"))
+  (POST "/make-account" req (do
+                              (db/make-account (:form-params req))
+                              (p/list-accounts (db/select-all-accounts))))
+  (POST "/upload-picc"  req (str "<pre>"
+                                 (with-out-str (clojure.pprint/pprint req))
+                                 "</pre>"))
   (route/not-found "<h1>404</h1>"))
 
 (def app

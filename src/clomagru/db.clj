@@ -59,5 +59,4 @@
 (defn make-account [user-info]
   (do
     (let [credentials (destructure-form-input user-info)]
-      (create-account credentials)
-    (str "Created account for " (:username credentials) "."))))
+      (create-account credentials))))
