@@ -23,10 +23,10 @@
 (def nav-bar
   [:nav
    [:ul
-    [:li [:a {:href "list"} "See all users"]]
-    [:li [:a {:href "register"} "Sign up"]]
+    [:li [:a {:href "/"} "Index"]]
     [:li [:a {:href "camera"} "Take a photo"]]
-    [:li [:a {:href "/"} "Index"]]]
+    [:li [:a {:href "list"} "See all users"]]
+    [:li [:a {:href "register"} "Sign up"]]]
    [:hr]])
 
 (defn register-page []
@@ -56,6 +56,7 @@
   [:form {:method "post" :action "upload-picc"}
    [:fieldset
     [:legend "Choose an image"]
+    (form/text-field "henlo")
     (form/file-upload "file") [:br]
     (form/submit-button "Submit")]])
 
