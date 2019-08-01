@@ -50,3 +50,14 @@
   (str "<pre>"
        (with-out-str (pprint (select-all-accounts)))
        "</pre>"))
+
+(defn destructure-form-input [form-params]
+  {:username (get form-params "username")
+   :email (get form-params "email")
+   :password (get form-params "password")})
+
+(defn make-account [user-info]
+  (do
+    (let [credentials (destructure-form-input user-info)]
+      (create-account credentials)
+    (str "Created account for " (:username credentials) "."))))
