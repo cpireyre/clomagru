@@ -53,11 +53,10 @@
        [:li (print-one-user user)])]))
 
 (def pic-upload-form
-  [:form {:method "post" :action "upload-picc"}
+  [:form {:method "post" :action "upload-picc" :enctype "multipart/form-data"}
    [:fieldset
-    [:legend "Choose an image"]
-    (form/text-field "henlo")
-    (form/file-upload "file") [:br]
+    [:legend "Choose an image"] 
+    (form/file-upload {:accept "image/jpeg, image/png"} "file") [:br]
     (form/submit-button "Submit")]])
 
 (def camera

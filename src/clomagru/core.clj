@@ -16,6 +16,7 @@
 
 (defroutes app-routes
   (GET "/"              []  (p/index-page))
+  (GET "/print"         []  (clojure.pprint/pprint "henlo"))
   (GET "/camera"        []  (p/camera-page))
   (GET "/list"          []  (p/list-accounts (db/select-all-accounts)))
   (GET "/register"      []  (p/register-page))
@@ -30,8 +31,7 @@
 (def app
   (-> app-routes
       (wrap-defaults (-> site-defaults
-                      (assoc-in [:security :anti-forgery] false)
-                      (assoc-in [:params :multipart] {:store byte-array-store})))))
+                      (assoc-in [:security :anti-forgery] false)))))
 
 (defn -main
   "Turns on web server."
