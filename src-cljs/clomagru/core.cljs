@@ -1,3 +1,8 @@
-(ns clomagru-cljs.core)
+(ns clomagru-cljs.core
+  (:require [reagent.core :as r]))
 
-(print "nice meme")
+(defn henlo []
+  [:h1 "React component here"])
+
+(r/render [henlo]
+          (js/document.getElementById "app"))

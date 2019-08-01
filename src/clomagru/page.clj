@@ -1,5 +1,6 @@
 (ns clomagru.page
   (:require [hiccup.core :as hiccup]
+            [hiccup.form :as form]
             [hiccup.page :as page :refer [include-js]]))
 
 (defn header [title]
@@ -51,13 +52,18 @@
      (for [user accounts]
        [:li (print-one-user user)])]))
 
+(def pic-upload-form
+  [:form {:method "post" :action "upload-picc"}
+   [:fieldset
+    [:legend "Choose an image"]
+    (form/file-upload "file") [:br]
+    (form/submit-button "Submit")]])
 
 (def camera
   [:main
-  [:h1 "Look alive!"]
-  [:h2 "Working on it"]
-  [:script {:type "text/javascript" :src "app.js"}
-   [:div {:id "app"}]]])
+   [:h1 "Look alive!"]
+   [:div {:id "app"}]
+   [:script {:type "text/javascript" :src "app.js"}]])
 
 (defn camera-page []
-  (hiccup/html (header "Take a photo") nav-bar camera))
+  (hiccup/html (header "Take a photo") nav-bar camera pic-upload-form))
