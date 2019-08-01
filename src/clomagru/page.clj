@@ -1,5 +1,6 @@
 (ns clomagru.page
-  (:require [hiccup.core :as hiccup]))
+  (:require [hiccup.core :as hiccup]
+            [hiccup.page :as page :refer [include-js]]))
 
 (defn header [title]
   [:head
@@ -23,6 +24,7 @@
    [:ul
     [:li [:a {:href "list"} "See all users"]]
     [:li [:a {:href "register"} "Sign up"]]
+    [:li [:a {:href "camera"} "Take a photo"]]
     [:li [:a {:href "/"} "Index"]]]
    [:hr]])
 
@@ -48,3 +50,14 @@
     [:ol
      (for [user accounts]
        [:li (print-one-user user)])]))
+
+
+(def camera
+  [:main
+  [:h1 "Look alive!"]
+  [:h2 "Working on it"]
+  [:script {:type "text/javascript" :src "app.js"}
+   [:div {:id "app"}]]])
+
+(defn camera-page []
+  (hiccup/html (header "Take a photo") nav-bar camera))

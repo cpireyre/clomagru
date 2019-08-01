@@ -23,6 +23,7 @@
 
 (defroutes app-routes
   (GET "/" [] (p/index-page))
+  (GET "/camera" [] (p/camera-page))
   (GET "/list" [] (p/list-accounts (db/select-all-accounts)))
   (GET "/register" [] (p/register-page))
   (POST "/make-account" req (make-account (:form-params req)))
