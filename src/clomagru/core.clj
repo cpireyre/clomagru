@@ -31,7 +31,7 @@
 (def app
   (-> app-routes
       (wrap-defaults (-> site-defaults
-                      (assoc-in [:security :anti-forgery] false)))))
+                         (assoc-in [:security :anti-forgery] false)))))
 
 (defn -main
   "Turns on web server."
