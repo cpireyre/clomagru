@@ -29,10 +29,11 @@
 ;;    This is another decision point.
 ;;  Wouldn't it be better to encrypt the password earlier in the process?
 ;;  Like, in the browser maybe, before it even gets sent via POST.
-;;    There's also the question of which encryption to use. Quick research suggests
-;;  Argon2 but this crypto.password library seems alright.
+;;    There's also the question of which encryption to use.
+;;  Quick research suggests Argon2 but this crypto.password library seems OK.
 
-(defn create-account [{:keys [username email password]}] ;; Maybe pass db as argument to this fn?
+;; Maybe pass db as argument to this fn?
+(defn create-account [{:keys [username email password]}]
   (jdbc/execute! ds [(str
                        "INSERT INTO "
                        "accounts(id,name,email,password,created_at) "
