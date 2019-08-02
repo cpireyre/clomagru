@@ -16,7 +16,6 @@
 
 (defn do-whatever-with-pic [req]
   (let [file (get req "file")]
-    (spit "resources/public/img/meme_img.jpg" (:tempfile file))
     (str "<pre>"
          (with-out-str (clojure.pprint/pprint file))
          "</pre>")))
