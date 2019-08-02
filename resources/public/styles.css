@@ -28,7 +28,7 @@
 /*  General style. */
 
 body {
-  background-color: #2e3440;
+  background-color: #3b4252;
   color: #d8dee9;
   font-family: sans-serif;
 }
@@ -65,6 +65,9 @@ nav>ul>li>a:hover {
 }
 
 /*  Forms style. */
+fieldset {
+  background-color: #2e3440;
+}
 
 button, input {
   background-color: #3b4252;
