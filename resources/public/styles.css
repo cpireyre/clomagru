@@ -31,6 +31,7 @@ body {
   background-color: #3b4252;
   color: #d8dee9;
   font-family: sans-serif;
+  font-size: large;
   text-align: center;
 }
 
@@ -81,4 +82,12 @@ fieldset {
   border: 1px solid #4c566a;
   display: inline-block;
   text-align: right;
+}
+
+/*  Footer style. */
+
+footer {
+  bottom: 0;
+  left; 0;
+  position: fixed;
 }

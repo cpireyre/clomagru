@@ -14,6 +14,13 @@
             [clomagru.db :as db])
   (:gen-class))
 
+(defn do-whatever-with-pic [req]
+  (let [file (get req "file")]
+    (spit "resources/public/img/meme_img.jpg" (:tempfile file))
+    (str "<pre>"
+         (with-out-str (clojure.pprint/pprint file))
+         "</pre>")))
+
 (defroutes app-routes
   (GET "/"              []  (p/index-page))
   (GET "/print"         []  (clojure.pprint/pprint "henlo"))
@@ -23,9 +30,7 @@
   (POST "/make-account" req (do
                               (db/make-account (:form-params req))
                               (p/list-accounts (db/select-all-accounts))))
-  (POST "/upload-picc"  req (str "<pre>"
-                                 (with-out-str (clojure.pprint/pprint req))
-                                 "</pre>"))
+  (POST "/upload-picc"  req (do-whatever-with-pic (:multipart-params req)))
   (route/not-found "<h1>404</h1>"))
 
 (def app

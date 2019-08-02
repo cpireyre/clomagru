@@ -29,6 +29,11 @@
     [:li [:a {:href "register"} "Sign up"]]]
    [:hr]])
 
+(def footer
+  [:footer
+   [:hr]
+   [:p "Powered by Clojure or whatever."]])
+
 (defn register-page []
   (html5 (header "Join Clomagru") nav-bar register-form))
 
@@ -66,4 +71,4 @@
    [:script {:type "text/javascript" :src "app.js"}]])
 
 (defn camera-page []
-  (html5 (header "Take a photo") nav-bar camera pic-upload-form))
+  (html5 (header "Take a photo") nav-bar camera pic-upload-form footer))
