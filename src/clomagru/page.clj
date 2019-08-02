@@ -1,7 +1,7 @@
 (ns clomagru.page
   (:require [hiccup.core :as hiccup]
             [hiccup.form :as form]
-            [hiccup.page :as page :refer [include-js]]))
+            [hiccup.page :as page :refer [include-js html5]]))
 
 (defn header [title]
   [:head
@@ -30,10 +30,10 @@
    [:hr]])
 
 (defn register-page []
-  (hiccup/html (header "Join Clomagru") nav-bar register-form))
+  (html5 (header "Join Clomagru") nav-bar register-form))
 
 (defn index-page []
-  (hiccup/html (header "Clomagru home page") nav-bar
+  (html5 (header "Clomagru home page") nav-bar
                [:h1 "Clomagru"]
                [:h2 "Coming soon."]))
 
@@ -44,7 +44,7 @@
        "."])
 
 (defn list-accounts [accounts]
-  (hiccup/html
+  (html5
     (header "They use Clomagru")
     nav-bar
     [:h1 "People on this site"]
@@ -66,4 +66,4 @@
    [:script {:type "text/javascript" :src "app.js"}]])
 
 (defn camera-page []
-  (hiccup/html (header "Take a photo") nav-bar camera pic-upload-form))
+  (html5 (header "Take a photo") nav-bar camera pic-upload-form))
