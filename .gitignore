@@ -13,3 +13,4 @@ pom.xml.asc
 *.js
 resources/public/goog
 *.db
+.nrepl-history
