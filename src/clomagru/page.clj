@@ -35,12 +35,13 @@
    [:p "Powered by Clojure or whatever."]])
 
 (defn register-page []
-  (html5 (header "Join Clomagru") nav-bar register-form))
+  (html5 (header "Join Clomagru") nav-bar register-form footer))
 
 (defn index-page []
   (html5 (header "Clomagru home page") nav-bar
                [:h1 "Clomagru"]
-               [:h2 "Coming soon."]))
+               [:h2 "Coming soon."]
+               footer))
 
 (defn print-one-user [user]
   [:p [:em (:accounts/name user)]
@@ -55,7 +56,8 @@
     [:h1 "People on this site"]
     [:ol
      (for [user accounts]
-       [:li (print-one-user user)])]))
+       [:li (print-one-user user)])]
+    footer))
 
 (def pic-upload-form
   [:form {:method "post" :action "upload-picc" :enctype "multipart/form-data"}
