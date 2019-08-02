@@ -31,6 +31,7 @@ body {
   background-color: #3b4252;
   color: #d8dee9;
   font-family: sans-serif;
+  text-align: center;
 }
 
 a {
@@ -42,10 +43,10 @@ a {
 }
 
 hr {
+  border-bottom: 1px dotted #88c0d0;
   border-left: none;
   border-right: none;
   border-top: none;
-  border-bottom: 1px dotted #88c0d0;
 }
 
 em {
@@ -69,14 +70,15 @@ fieldset {
   background-color: #2e3440;
 }
 
-button, input {
+button,
+input {
   background-color: #3b4252;
-  color: #88c0d0;
   border: 1px solid #4c566a;
+  color: #88c0d0;
 }
 
 fieldset {
   border: 1px solid #4c566a;
-  text-align: right;
   display: inline-block;
+  text-align: right;
 }
