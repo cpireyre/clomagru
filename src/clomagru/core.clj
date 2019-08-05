@@ -17,12 +17,12 @@
   (:gen-class))
 
 (defroutes app-routes
-  (GET "/"              []  (p/index-page))
+  (GET "/"              []      (p/index-page))
   (GET "/pics/:uuid"    [uuid]  (gallery/get-image uuid))
-  (GET "/print"         []  (clojure.pprint/pprint "henlo"))
-  (GET "/camera"        []  (p/camera-page))
-  (GET "/list"          []  (p/list-accounts (db/select-all-accounts)))
-  (GET "/register"      []  (p/register-page))
+  (GET "/print"         []      (clojure.pprint/pprint "henlo"))
+  (GET "/camera"        []      (p/camera-page))
+  (GET "/list"          []      (p/list-accounts (db/select-all-accounts)))
+  (GET "/register"      []      (p/register-page))
   (POST "/make-account" req (do
                               (db/make-account (:form-params req))
                               (p/list-accounts (db/select-all-accounts))))
