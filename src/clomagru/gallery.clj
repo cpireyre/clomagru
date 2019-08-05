@@ -23,17 +23,21 @@
     (str "<h1>404!</h1>")))
 
 (defn one-image [url]
-  [:img {:src url
-         :width "500px"
-         :height "500px"}])
+  [:li [:p [:a {:href url}
+        [:img {:src url
+               :width "250px"
+               :height "250px"}]]]])
 
 (defn get-user-pics [user]
-  (map (comp one-image #(str "/pics/" %) :files/id) (db/get-images-id-by-owner "guy garvey")))
+  (map (comp one-image #(str "/pics/" %) :files/id)
+       (db/get-images-id-by-owner "guy garvey")))
 
 (defn get-user-gallery [user]
   (let [pics (get-user-pics user)]
     (hiccup/html (p/header (str user "'s gallery"))
                  p/nav-bar
-                 [:main
-                  pics]
+                 [:main {:id "gallery"}
+                  [:h1 (str user)]
+                  [:ul
+                   pics]]
                  p/footer)))

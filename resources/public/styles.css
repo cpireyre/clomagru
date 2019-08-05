@@ -91,3 +91,16 @@ footer {
   left; 0;
   position: fixed;
 }
+
+/*  Gallery style.  */
+
+#gallery {
+  border: 1px solid red;
+}
+
+#gallery>ul {
+  display: flex;
+  justify-content: space-evenly;
+  list-style-type: none;
+}
+
