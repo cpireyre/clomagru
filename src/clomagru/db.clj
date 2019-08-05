@@ -1,5 +1,6 @@
 (ns clomagru.db
   (:require [next.jdbc :as jdbc]
+            [next.jdbc.sql :as sql]
             [clojure.pprint :refer [pprint]]
             [crypto.password.pbkdf2 :as password]))
 
@@ -72,15 +73,11 @@
 
 
 (defn save-file! [{:keys [owner data type]}]
-  (jdbc/execute! ds [(str
-                       "INSERT INTO "
-                       "files (id,owner,type,data,created_at) "
-                       "VALUES ('"
-                        (java.util.UUID/randomUUID)
-                        "','" owner
-                        "','" type
-                        "','" data
-                        "','" (System/currentTimeMillis) "')")]))
+  (sql/insert! ds :files {:id (java.util.UUID/randomUUID)
+                          :owner owner
+                          :type type
+                          :data data
+                          :created_at (System/currentTimeMillis)}))
 
 (defn get-images-id-by-owner [owner]
   (jdbc/execute! ds [(str

@@ -6,6 +6,7 @@
   :dependencies [[org.clojure/clojure "1.10.0"]
                  [org.clojure/clojurescript "1.10.520"]
                  [ring "1.7.1"]
+                 [metosin/ring-http-response "0.9.1"]
                  [ring/ring-defaults "0.3.2"]
                  [compojure "1.6.1"]
                  [hiccup "1.0.5"]

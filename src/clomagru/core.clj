@@ -11,17 +11,14 @@
             [compojure.route :as route]
             ;[compojure.coercions :as c]
             [clomagru.page :as p]
+            [clomagru.upload :as upload]
+            [clomagru.gallery :as gallery]
             [clomagru.db :as db])
   (:gen-class))
 
-(defn do-whatever-with-pic [req]
-  (let [file (get req "file")]
-    (str "<pre>"
-         (with-out-str (clojure.pprint/pprint file))
-         "</pre>")))
-
 (defroutes app-routes
   (GET "/"              []  (p/index-page))
+  (GET "/pics/:uuid"    [uuid]  (gallery/get-image uuid))
   (GET "/print"         []  (clojure.pprint/pprint "henlo"))
   (GET "/camera"        []  (p/camera-page))
   (GET "/list"          []  (p/list-accounts (db/select-all-accounts)))
@@ -29,7 +26,7 @@
   (POST "/make-account" req (do
                               (db/make-account (:form-params req))
                               (p/list-accounts (db/select-all-accounts))))
-  (POST "/upload-picc"  req (do-whatever-with-pic (:multipart-params req)))
+  (POST "/upload-picc"  req (upload/save-image! "guy garvey" (get (:multipart-params req) "file")))
   (route/not-found "<h1>404</h1>"))
 
 (def app
