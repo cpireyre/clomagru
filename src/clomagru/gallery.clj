@@ -1,12 +1,21 @@
 (ns clomagru.gallery
   (:require [clomagru.db :as db]
             [ring.util.http-response :refer :all])
-;;  "files" below is the name of the database table...
-;;  Database internals are leaking.
+  (:import java.io.ByteArrayInputStream))
 
+(defn string-uuid? [s]
+  (if (re-find
+        #"^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$"
+           s)
+    true
+    false))
+
+;; TODO: Fix status codes
 (defn get-image [uuid]
-  (if (uuid? uuid)
+  (if (string-uuid? uuid)
     (if-let [picc (first (db/get-image uuid))]
-      (clojure.pprint/pprint (:files/data picc))
-      (not-found))
-    (str "All pics are referred to by UUIDs around here.")))
+      (-> (ByteArrayInputStream. (:files/data picc))
+          (ok)
+          (content-type (:files/type picc)))
+      (str "<h1>404</h1>"))
+    (str "<h1>404!</h1>")))
