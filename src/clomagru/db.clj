@@ -18,13 +18,13 @@
 ;;  type only goes up to 8 bytes where UUIDs need 16.
 ;;  I guess I'll just use strings.
 
-;; (jdbc/execute! ds ["
-;;                    CREATE TABLE accounts (
-;;                    id TEXT PRIMARY KEY UNIQUE NOT NULL,
-;;                    name TEXT UNIQUE NOT NULL,
-;;                    email TEXT UNIQUE NOT NULL,
-;;                    password TEXT NOT NULL,
-;;                    created_at INTEGER NOT NULL ) "])
+; (jdbc/execute! ds ["
+;                    CREATE TABLE accounts (
+;                    id TEXT PRIMARY KEY UNIQUE NOT NULL,
+;                    name TEXT UNIQUE NOT NULL,
+;                    email TEXT UNIQUE NOT NULL,
+;                    password TEXT NOT NULL,
+;                    created_at INTEGER NOT NULL ) "])
 
 ;;    This is another decision point.
 ;;  Wouldn't it be better to encrypt the password earlier in the process?
@@ -61,3 +61,37 @@
   (do
     (let [credentials (destructure-form-input user-info)]
       (create-account credentials))))
+
+; (jdbc/execute! ds ["
+;                    CREATE TABLE files (
+;                     id TEXT PRIMARY KEY UNIQUE NOT NULL,
+;                     owner TEXT NOT NULL,
+;                     type TEXT NOT NULL,
+;                     data BLOB,
+;                     created_at INTEGER NOT NULL )"])
+
+
+(defn save-file! [{:keys [owner data type]}]
+  (jdbc/execute! ds [(str
+                       "INSERT INTO "
+                       "files (id,owner,type,data,created_at) "
+                       "VALUES ('"
+                        (java.util.UUID/randomUUID)
+                        "','" owner
+                        "','" type
+                        "','" data
+                        "','" (System/currentTimeMillis) "')")]))
+
+(defn get-images-id-by-owner [owner]
+  (jdbc/execute! ds [(str
+                       "SELECT id FROM files "
+                       "WHERE owner ='"
+                       owner
+                       "'")]))
+
+(defn get-image [uuid]
+  (jdbc/execute! ds [(str
+                       "SELECT type, data FROM files "
+                       "WHERE id ='"
+                       uuid
+                       "'")]))
