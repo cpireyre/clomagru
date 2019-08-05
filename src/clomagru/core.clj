@@ -19,6 +19,7 @@
 (defroutes app-routes
   (GET "/"              []      (p/index-page))
   (GET "/pics/:uuid"    [uuid]  (gallery/get-image uuid))
+  (GET "/gallery/:user" [user]  (gallery/get-user-gallery user))
   (GET "/print"         []      (clojure.pprint/pprint "henlo"))
   (GET "/camera"        []      (p/camera-page))
   (GET "/list"          []      (p/list-accounts (db/select-all-accounts)))

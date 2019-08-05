@@ -6,7 +6,7 @@
 (defn header [title]
   [:head
    [:title title]
-   [:link {:rel "stylesheet" :href "styles.css"}]])
+   [:link {:rel "stylesheet" :href "/styles.css"}]])
 
 (def register-form
   [:form {:method "post" :action "make-account"}
@@ -24,9 +24,9 @@
   [:nav
    [:ul
     [:li [:a {:href "/"} "Index"]]
-    [:li [:a {:href "camera"} "Take a photo"]]
-    [:li [:a {:href "list"} "See all users"]]
-    [:li [:a {:href "register"} "Sign up"]]]
+    [:li [:a {:href "/camera"} "Take a photo"]]
+    [:li [:a {:href "/list"} "See all users"]]
+    [:li [:a {:href "/register"} "Sign up"]]]
    [:hr]])
 
 (def footer

@@ -1,5 +1,7 @@
 (ns clomagru.gallery
   (:require [clomagru.db :as db]
+            [clomagru.page :as p]
+            [hiccup.core :as hiccup]
             [ring.util.http-response :refer :all])
   (:import java.io.ByteArrayInputStream))
 
@@ -19,3 +21,19 @@
           (content-type (:files/type picc)))
       (str "<h1>404</h1>"))
     (str "<h1>404!</h1>")))
+
+(defn one-image [url]
+  [:img {:src url
+         :width "500px"
+         :height "500px"}])
+
+(defn get-user-pics [user]
+  (map (comp one-image #(str "/pics/" %) :files/id) (db/get-images-id-by-owner "guy garvey")))
+
+(defn get-user-gallery [user]
+  (let [pics (get-user-pics user)]
+    (hiccup/html (p/header (str user "'s gallery"))
+                 p/nav-bar
+                 [:main
+                  pics]
+                 p/footer)))
