@@ -60,9 +60,17 @@
                              :password (password/encrypt password)
                              :created_at (System/currentTimeMillis)}))
 
+(def user-info-validations
+  {:username [v/required
+              [alnum? :message "Name must only contain alphanumerics."]]
+   :email v/required
+   :password v/required})
+
 (defn make-account [user-info]
   (let [credentials (destructure-form-input user-info)]
-    (create-account credentials)))
+    (if (b/valid? credentials user-info-validations) 
+      (create-account credentials)
+      "Invalid account parameters.")))
 
 ; (jdbc/execute! ds ["
 ;                    CREATE TABLE files (

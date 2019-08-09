@@ -13,7 +13,8 @@
                  [seancorfield/next.jdbc "1.0.2"]
                  [org.xerial/sqlite-jdbc "3.28.0"]
                  [crypto-password "0.2.1"]
-                 [reagent "0.8.1"]]
+                 [reagent "0.8.1"]
+                 [bouncer "1.0.1"]]
   :main ^:skip-aot clomagru.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}}
