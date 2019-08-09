@@ -2,7 +2,9 @@
   (:require [next.jdbc :as jdbc]
             [next.jdbc.sql :as sql]
             [clojure.pprint :refer [pprint]]
-            [crypto.password.pbkdf2 :as password]))
+            [crypto.password.pbkdf2 :as password]
+            [bouncer.core :as b]
+            [bouncer.validators :as v]))
 
 (def db {:dbtype "sqlite" :dbname "src/clomagru/db/database.db"})
 
@@ -34,16 +36,6 @@
 ;;  Quick research suggests Argon2 but this crypto.password library seems OK.
 
 ;; Maybe pass db as argument to this fn?
-(defn create-account [{:keys [username email password]}]
-  (jdbc/execute! ds [(str
-                       "INSERT INTO "
-                       "accounts(id,name,email,password,created_at) "
-                       "VALUES('"
-                       (java.util.UUID/randomUUID)
-                       "','" username
-                       "','" email
-                       "','" (password/encrypt password)
-                       "','" (System/currentTimeMillis) "')")]))
 
 (defn select-all-accounts []
   (jdbc/execute! ds ["select * from accounts"]))
@@ -58,10 +50,19 @@
    :email (get form-params "email")
    :password (get form-params "password")})
 
+(defn alnum? [s]
+  (boolean (re-matches #"^[\w]+$" s)))
+
+(defn create-account [{:keys [username email password]}]
+  (sql/insert! ds :accounts {:id (java.util.UUID/randomUUID)
+                             :name username
+                             :email email
+                             :password (password/encrypt password)
+                             :created_at (System/currentTimeMillis)}))
+
 (defn make-account [user-info]
-  (do
-    (let [credentials (destructure-form-input user-info)]
-      (create-account credentials))))
+  (let [credentials (destructure-form-input user-info)]
+    (create-account credentials)))
 
 ; (jdbc/execute! ds ["
 ;                    CREATE TABLE files (
