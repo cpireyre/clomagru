@@ -4,7 +4,8 @@
             [clojure.pprint :refer [pprint]]
             [crypto.password.pbkdf2 :as password]
             [bouncer.core :as b]
-            [bouncer.validators :as v]))
+            [bouncer.validators :as v]
+            [clomagru.log :as log]))
 
 (def db {:dbtype "sqlite" :dbname "src/clomagru/db/database.db"})
 
@@ -54,11 +55,13 @@
   (boolean (re-matches #"^[\w]+$" s)))
 
 (defn create-account [{:keys [username email password]}]
-  (sql/insert! ds :accounts {:id (java.util.UUID/randomUUID)
-                             :name username
-                             :email email
-                             :password (password/encrypt password)
-                             :created_at (System/currentTimeMillis)}))
+  (let [id (java.util.UUID/randomUUID)]
+    (log/timelog-stdin "Creating account for" username "as" id)
+    (sql/insert! ds :accounts {:id id
+                               :name username
+                               :email email
+                               :password (password/encrypt password)
+                               :created_at (System/currentTimeMillis)})))
 
 (def user-info-validations
   {:username [v/required
@@ -70,7 +73,7 @@
   (let [credentials (destructure-form-input user-info)]
     (if (b/valid? credentials user-info-validations) 
       (create-account credentials)
-      "Invalid account parameters.")))
+      nil)))
 
 ; (jdbc/execute! ds ["
 ;                    CREATE TABLE files (
@@ -80,13 +83,16 @@
 ;                     data BLOB,
 ;                     created_at INTEGER NOT NULL )"])
 
-
+;;  TODO:
+;;  Why on Earth am I saving the owner username instead of UUID?
 (defn save-file! [{:keys [owner data type]}]
-  (sql/insert! ds :files {:id (java.util.UUID/randomUUID)
-                          :owner owner
-                          :type type
-                          :data data
-                          :created_at (System/currentTimeMillis)}))
+  (let [id (java.util.UUID/randomUUID)]
+    (log/timelog-stdin "Saving" type "from" owner "as" id)
+    (sql/insert! ds :files {:id id
+                            :owner owner
+                            :type type
+                            :data data
+                            :created_at (System/currentTimeMillis)})))
 
 (defn get-images-id-by-owner [owner]
   (jdbc/execute! ds [(str

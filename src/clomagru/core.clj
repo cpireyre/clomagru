@@ -38,5 +38,5 @@
 (defn -main
   "Turns on web server."
   [& args]
-  (println "Starting server...")
+  (println "Starting server.")
   (run-jetty (wrap-reload #'app) {:port 3000})); live reload whilst developping
