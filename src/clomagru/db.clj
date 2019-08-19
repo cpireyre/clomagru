@@ -7,6 +7,7 @@
             [clomagru.log :as log]
             [clomagru.initdb :refer [init-datasource]]))
 
+;;  "src/clomagru/db" directory needs to exist.
 (def db {:dbtype "sqlite" :dbname "src/clomagru/db/database.db"})
 (def ds (init-datasource db))
 
