@@ -5,6 +5,7 @@
             :url "https://www.eclipse.org/legal/epl-2.0/"}
   :dependencies [[org.clojure/clojure "1.10.0"]
                  [org.clojure/clojurescript "1.10.520"]
+                 [org.clojure/test.check "0.10.0"]
                  [ring "1.7.1"]
                  [metosin/ring-http-response "0.9.1"]
                  [ring/ring-defaults "0.3.2"]
@@ -15,6 +16,7 @@
                  [crypto-password "0.2.1"]
                  [reagent "0.8.1"]
                  [bouncer "1.0.1"]]
+  :repl-options {:init-ns clomagru.core}
   :main ^:skip-aot clomagru.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}}

@@ -1,7 +1,8 @@
 (ns clomagru.page
   (:require [hiccup.core :as hiccup]
             [hiccup.form :as form]
-            [hiccup.page :as page :refer [include-js html5]]))
+            [hiccup.page :as page :refer [include-js html5]]
+            [clomagru.users :as users]))
 
 (defn header [title]
   [:head
