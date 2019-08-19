@@ -20,7 +20,6 @@
   (GET "/"              []      (p/index-page))
   (GET "/pics/:uuid"    [uuid]  (gallery/get-image uuid))
   (GET "/gallery/:user" [user]  (gallery/get-user-gallery user))
-  (GET "/print"         []      (clojure.pprint/pprint "henlo"))
   (GET "/camera"        []      (p/camera-page))
   (GET "/list"          []      (p/list-accounts (db/select-all-accounts)))
   (GET "/register"      []      (p/register-page))
@@ -40,3 +39,4 @@
   [& args]
   (println "Starting server.")
   (run-jetty (wrap-reload #'app) {:port 3000})); live reload whilst developping
+
