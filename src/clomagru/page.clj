@@ -45,7 +45,7 @@
                footer))
 
 (defn print-one-user [user]
-  [:p [:em (:accounts/name user)]
+  [:p [:em (:accounts/username user)]
        " signed up on "
        [:time (str (java.util.Date. (:accounts/created_at user)))]
        "."])

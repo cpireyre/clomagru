@@ -49,12 +49,6 @@
                                :password (password/encrypt password)
                                :created_at (System/currentTimeMillis)})))
 
-(def user-info-validations
-  {:username [v/required
-              [alnum? :message "Name must only contain alphanumerics."]]
-   :email v/required
-   :password v/required})
-
 ;;  TODO:
 ;;  Check uniqueness of relevant user info before inserting.
 (defn make-account [user-info]
