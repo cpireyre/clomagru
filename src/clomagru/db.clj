@@ -27,9 +27,9 @@
        "</pre>"))
 
 (defn destructure-form-input [form-params]
-  {:username (get form-params "username")
-   :email (get form-params "email")
-   :password (get form-params "password")})
+  {:username  (get form-params "username")
+   :email     (get form-params "email")
+   :password  (get form-params "password")})
 
 (defn alnum? [s]
   (boolean (re-matches #"^[\w]+$" s)))
@@ -41,33 +41,42 @@
 ;;  Quick research suggests Argon2 but this crypto.password library seems OK.
 
 (defn create-account [{:keys [username email password]}]
-  (let [id (java.util.UUID/randomUUID)]
-    (log/timelog-stdin "Creating account for" username "as" id)
-    (sql/insert! ds :accounts {:id id
-                               :username username
-                               :email email
-                               :password (password/encrypt password)
-                               :created_at (System/currentTimeMillis)})))
-
-(defn make-account [user-info]
-  (let [credentials (destructure-form-input user-info)]
-    (if (and (users/valid-user? credentials) (unique-user? credentials))
-      (create-account credentials)
-      (log/timelog-stdin "Input didn't meet spec or already in db."))))
-
-(defn save-file! [{:keys [owner data type]}]
-  (let [id (java.util.UUID/randomUUID)]
-    (log/timelog-stdin "Saving" type "from" owner "as" id)
-    (sql/insert! ds :files {:id id
-                            :owner (get-uuid-by-username owner)
-                            :type type
-                            :data data
-                            :created_at (System/currentTimeMillis)})))
-
-(defn get-image [uuid]
-  (sql/get-by-id ds :files uuid))
+  (let [id   (java.util.UUID/randomUUID)
+        hash (password/encrypt password)
+        now  (System/currentTimeMillis)]
+    (log/timelog-stdin "Creating account:" id username email hash)
+    (sql/insert! ds :accounts {:id         id
+                               :username   username
+                               :email      email
+                               :password   hash
+                               :created_at now})))
 
 (defn unique-user? [credentials]  ;; Perhaps this should be one request with OR
   (and 
     (empty? (sql/find-by-keys ds :accounts {:username (:username credentials)}))
     (empty? (sql/find-by-keys ds :accounts {:email (:email credentials)}))))
+
+;;   Re: logging of errors and unmet specs, it's probably best to
+;;  decouple some of this validation logic and only log the stuff that could
+;;  be flagged as malicious, instead of like, every single typo that comes
+;;  through.
+
+(defn make-account [user-info]
+  (let [credentials (destructure-form-input user-info)]
+    (when (and (users/valid-user? credentials) (unique-user? credentials))
+      (create-account credentials))))
+
+(defn save-file! [{:keys [owner data type]}]
+  (let [id         (java.util.UUID/randomUUID)
+        owner-uuid (get-uuid-by-username owner)
+        now        (System/currentTimeMillis)]
+    (log/timelog-stdin "Saving" type "from" owner "as" id)
+    (sql/insert! ds :files {:id         id
+                            :owner      owner-uuid
+                            :type       type
+                            :data       data
+                            :created_at now})))
+
+(defn get-image [uuid]
+  (sql/get-by-id ds :files uuid))
+

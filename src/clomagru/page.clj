@@ -14,11 +14,11 @@
    [:fieldset
     [:legend "Make an account"] [:br]
     [:label "Name: "
-     [:input {:name "username" :value "guy garvey"}]] [:br]
+     [:input {:name "username" :value "guygarvey"}]] [:br]
     [:label "E-mail: "
      [:input {:name "email" :type "email" :value "meme@meme.meme"}]] [:br]
     [:label "Password: "
-     [:input {:name "password" :type "password" :value "henlo"}]] [:br]
+     [:input {:name "password" :type "password" :value "hhenlohenenlo"}]] [:br]
     [:button "Submit"]]])
 
 (def nav-bar

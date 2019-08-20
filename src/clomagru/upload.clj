@@ -9,8 +9,7 @@
     (.toByteArray buffer)))
 
 (defn save-image! [user {:keys [tempfile filename content-type]}]
-  (let [db-file-name (str user (System/currentTimeMillis))]
-    (db/save-file! {:owner user
-                    :type   content-type
-                    :data  (file->byte-array tempfile)})
-    (str "saved file?")))
+  (db/save-file! {:owner user
+                  :type  content-type
+                  :data  (file->byte-array tempfile)})
+  (str "saved file?"))
