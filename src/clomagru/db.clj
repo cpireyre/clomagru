@@ -49,13 +49,11 @@
                                :password (password/encrypt password)
                                :created_at (System/currentTimeMillis)})))
 
-;;  TODO:
-;;  Check uniqueness of relevant user info before inserting.
 (defn make-account [user-info]
   (let [credentials (destructure-form-input user-info)]
-    (if (users/valid-user? credentials) 
+    (if (and (users/valid-user? credentials) (unique-user? credentials))
       (create-account credentials)
-      (log/timelog-stdin "User info did not pass validation" user-info))))
+      (log/timelog-stdin "Input didn't meet spec or already in db."))))
 
 (defn save-file! [{:keys [owner data type]}]
   (let [id (java.util.UUID/randomUUID)]
@@ -69,7 +67,7 @@
 (defn get-image [uuid]
   (sql/get-by-id ds :files uuid))
 
-(defn unique-user? [credentials]
+(defn unique-user? [credentials]  ;; Perhaps this should be one request with OR
   (and 
     (empty? (sql/find-by-keys ds :accounts {:username (:username credentials)}))
     (empty? (sql/find-by-keys ds :accounts {:email (:email credentials)}))))
