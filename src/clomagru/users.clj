@@ -40,3 +40,8 @@
 
 (defn gen-one-user []
   (gen/generate (s/gen ::user)))
+
+(defn valid-user? [credentials]
+  (and (s/valid? ::username (:username credentials))
+       (s/valid? ::password (:password credentials))
+       (s/valid? ::email (:email credentials))))

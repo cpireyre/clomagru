@@ -17,7 +17,7 @@
   (log/timelog-stdin "Creating accounts table in database.")
   (jdbc/execute! datasource ["CREATE TABLE accounts (
                               id TEXT PRIMARY KEY UNIQUE NOT NULL,
-                              name TEXT UNIQUE NOT NULL,
+                              username TEXT UNIQUE NOT NULL,
                               email TEXT UNIQUE NOT NULL,
                               password TEXT NOT NULL,
                               created_at INTEGER NOT NULL ) "]))

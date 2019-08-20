@@ -2,8 +2,7 @@
   (:require [next.jdbc.sql :as sql]
             [clojure.pprint :refer [pprint]]
             [crypto.password.pbkdf2 :as password]
-            [bouncer.core :as b]
-            [bouncer.validators :as v]
+            [clomagru.users :as users]
             [clomagru.log :as log]
             [clomagru.initdb :refer [init-datasource]]))
 
@@ -12,7 +11,7 @@
 (def ds (init-datasource db))
 
 (defn get-uuid-by-username [name]
-  (get-in (sql/find-by-keys ds :accounts {:name name})
+  (get-in (sql/find-by-keys ds :accounts {:username name})
           [0 :accounts/id]))
 
 (defn get-images-id-by-owner [name]
@@ -45,7 +44,7 @@
   (let [id (java.util.UUID/randomUUID)]
     (log/timelog-stdin "Creating account for" username "as" id)
     (sql/insert! ds :accounts {:id id
-                               :name username
+                               :username username
                                :email email
                                :password (password/encrypt password)
                                :created_at (System/currentTimeMillis)})))
@@ -60,7 +59,7 @@
 ;;  Check uniqueness of relevant user info before inserting.
 (defn make-account [user-info]
   (let [credentials (destructure-form-input user-info)]
-    (if (b/valid? credentials user-info-validations) 
+    (if (users/valid-user? credentials) 
       (create-account credentials)
       (log/timelog-stdin "User info did not pass validation" user-info))))
 
@@ -75,3 +74,8 @@
 
 (defn get-image [uuid]
   (sql/get-by-id ds :files uuid))
+
+(defn unique-user? [credentials]
+  (and 
+    (empty? (sql/find-by-keys ds :accounts {:username (:username credentials)}))
+    (empty? (sql/find-by-keys ds :accounts {:email (:email credentials)}))))
