@@ -45,3 +45,8 @@
   (and (s/valid? ::username (:username credentials))
        (s/valid? ::password (:password credentials))
        (s/valid? ::email (:email credentials))))
+
+(defn valid-credentials? [credentials]
+  "Same as valid-user? but does not require the ::email key."
+  (and (s/valid? ::username (:username credentials))
+       (s/valid? ::password (:password credentials))))

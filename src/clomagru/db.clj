@@ -80,3 +80,15 @@
 (defn get-image [uuid]
   (sql/get-by-id ds :files uuid))
 
+
+(defn get-pw-by-username [name]
+  (get-in (sql/find-by-keys ds :accounts {:username name})
+          [0 :accounts/password]))
+
+(defn match-credentials [credentials]
+  "Returns the user UUID if it exists and password checks out, nil otherwise."
+  (let [password (:password credentials)
+        username (:username credentials)]
+    (when-let [hash-in-db (get-pw-by-username username)]
+      (when (password/check password hash-in-db)
+        (get-uuid-by-username username)))))

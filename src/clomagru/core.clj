@@ -9,19 +9,19 @@
             [clomagru.page :as p]
             [clomagru.upload :as upload]
             [clomagru.gallery :as gallery]
-            [clomagru.db :as db])
+            [clomagru.db :as db]
+            [clomagru.login :as login])
   (:gen-class))
 
 (defroutes app-routes
   (GET "/"              []      (p/index-page))
   (GET "/login"         []      (p/login-page))
-  (POST "/login"        req     (str req))
+  (POST "/login"        req     (login/handler req))
   (GET "/pics/:uuid"    [uuid]  (gallery/get-image uuid))
   (GET "/gallery/:user" [user]  (gallery/get-user-gallery user))
   (GET "/camera"        []      (p/camera-page))
   (GET "/list"          []      (p/list-accounts (db/select-all-accounts)))
   (GET "/register"      []      (p/register-page))
-  (GET "/session"       req     (str req))
   (POST "/make-account" req (do
                               (db/make-account (:form-params req))
                               (p/list-accounts (db/select-all-accounts))))
