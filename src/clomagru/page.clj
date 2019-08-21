@@ -14,19 +14,31 @@
    [:fieldset
     [:legend "Make an account"] [:br]
     [:label "Name: "
-     [:input {:name "username" :value "guygarvey"}]] [:br]
+     [:input {:name     "username"
+              :value    "guygarvey"
+              :required true}]]
+    [:br]
     [:label "E-mail: "
-     [:input {:name "email" :type "email" :value "meme@meme.meme"}]] [:br]
+     [:input {:name     "email"
+              :type     "email"
+              :value    "meme@meme.meme"
+              :required true}]]
+    [:br]
     [:label "Password: "
-     [:input {:name "password" :type "password" :value "hhenlohenenlo"}]] [:br]
+     [:input {:name     "password"
+              :type     "password"
+              :value    "password123"
+              :required true}]]
+    [:br]
     [:button "Submit"]]])
 
 (def nav-bar
   [:nav
    [:ul
-    [:li [:a {:href "/"} "Index"]]
-    [:li [:a {:href "/camera"} "Take a photo"]]
-    [:li [:a {:href "/list"} "See all users"]]
+    [:li [:a {:href "/"}         "Index"]]
+    [:li [:a {:href "/login"}    "Sign in"]]
+    [:li [:a {:href "/camera"}   "Take a photo"]]
+    [:li [:a {:href "/list"}     "See all users"]]
     [:li [:a {:href "/register"} "Sign up"]]]
    [:hr]])
 
@@ -75,3 +87,16 @@
 
 (defn camera-page []
   (html5 (header "Take a photo") nav-bar camera pic-upload-form footer))
+
+(def login-form
+  (form/form-to [:post "/login"]
+   [:fieldset
+    [:legend "Please enter your credentials"]
+    [:label "Account name: "
+     (form/text-field {:required true} "username")] [:br]
+    [:label "Password: "
+     (form/password-field {:required true} "password")] [:br]
+    (form/submit-button "Submit")]))
+
+(defn login-page []
+  (html5 (header "Sign in") nav-bar login-form footer))
