@@ -11,7 +11,8 @@
             [clomagru.upload :as upload]
             [clomagru.gallery :as gallery]
             [clomagru.db :as db]
-            [clomagru.login :as login])
+            [clomagru.login :as login]
+            [clomagru.key :as key])
   (:gen-class))
 
 (defroutes app-routes
@@ -33,7 +34,8 @@
 (def app
   (-> app-routes
       (wrap-defaults (-> site-defaults
-                         (assoc-in [:session :store] (cookie-store {:key "0123456789abcdef"}))
+                         (assoc-in [:session :store]
+                                   (cookie-store {:key key/store-key}))
                          (assoc-in [:security :anti-forgery] false)))))
 
 (defn -main

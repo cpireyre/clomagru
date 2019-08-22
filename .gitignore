@@ -14,3 +14,4 @@ pom.xml.asc
 resources/public/goog
 *.db
 .nrepl-history
+src/clomagru/key.clj
