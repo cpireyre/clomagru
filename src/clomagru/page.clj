@@ -3,7 +3,8 @@
             [hiccup.form :as form]
             [hiccup.page :as page :refer [include-js html5]]
             [clomagru.users :as users]
-            [clomagru.db :as db]))
+            [clomagru.db :as db]
+            [clomagru.login :as login]))
 
 (defn header [title]
   [:head
@@ -34,15 +35,17 @@
     [:button "Submit"]]])
 
 (defn nav-bar [{session :session}]
-  (let [uuid (:uuid session)
+  (let [uuid     (:uuid session)
         username (db/get-username-by-uuid uuid)]
     [:nav
      [:ul
+      (when username
+        [:li (str "Hello, " username ".")])
       [:li [:a {:href "/"}       "Index"]]
       [:li [:a {:href "/camera"} "Take a photo"]]
       [:li [:a {:href "/list"}   "See all users"]]
       (if uuid
-        [:li (str "Hello, " username ".")]
+        [:li [:a {:href "/logout"} "Log out"]]
       '([:li [:a {:href "/register"} "Sign up"]]
         [:li [:a {:href "/login"}    "Sign in"]]))]
      [:hr]]))
@@ -104,4 +107,10 @@
     (form/submit-button "Submit")]))
 
 (defn login-page [req]
-  (html5 (header "Sign in") (nav-bar req) login-form footer))
+  (html5
+    (header "Sign in")
+    (nav-bar req)
+    (if-let [username (db/get-username-by-uuid (get-in req [:session :uuid]))]
+      [:p (str "You're looking pretty logged in to me, " username ".")]
+      login-form)
+    footer))

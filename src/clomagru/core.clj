@@ -17,6 +17,7 @@
 (defroutes app-routes
   (GET  "/"              req      (p/index-page req))
   (GET  "/login"         req      (p/login-page req))
+  (GET  "/logout"        req      (login/wipe-session))
   (POST "/login"         req      (login/handler req))
   (GET  "/pics/:uuid"    [uuid]   (gallery/get-image uuid))
   (GET  "/gallery/:user" [user]   (gallery/get-user-gallery user))
@@ -32,7 +33,7 @@
 (def app
   (-> app-routes
       (wrap-defaults (-> site-defaults
-                         (assoc-in [:session :store] (cookie-store))
+                         (assoc-in [:session :store] (cookie-store {:key "0123456789abcdef"}))
                          (assoc-in [:security :anti-forgery] false)))))
 
 (defn -main
