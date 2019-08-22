@@ -17,19 +17,16 @@
     [:legend "Make an account"] [:br]
     [:label "Name: "
      [:input {:name     "username"
-              :value    "guygarvey"
               :required true}]]
     [:br]
     [:label "E-mail: "
      [:input {:name     "email"
               :type     "email"
-              :value    "meme@meme.meme"
               :required true}]]
     [:br]
     [:label "Password: "
      [:input {:name     "password"
               :type     "password"
-              :value    "password123"
               :required true}]]
     [:br]
     [:button "Submit"]]])
@@ -40,7 +37,7 @@
     [:nav
      [:ul
       (when username
-        [:li (str "Hello, " username ".")])
+        [:li (str "Henlo, " username ".")])
       [:li [:a {:href "/"}       "Index"]]
       [:li [:a {:href "/camera"} "Take a photo"]]
       [:li [:a {:href "/list"}   "See all users"]]
