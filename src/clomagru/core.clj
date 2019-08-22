@@ -2,6 +2,7 @@
   (:require [ring.adapter.jetty :refer :all]
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
             [ring.middleware.session :refer :all]
+            [ring.middleware.session.cookie :refer [cookie-store]]
             [ring.middleware.anti-forgery :refer :all]
             [ring.middleware.reload :refer [wrap-reload]]
             [compojure.core :refer [defroutes GET POST]]
@@ -14,24 +15,24 @@
   (:gen-class))
 
 (defroutes app-routes
-  (GET "/"              []      (p/index-page))
-  (GET "/login"         []      (p/login-page))
-  (POST "/login"        req     (login/handler req))
-  (GET "/pics/:uuid"    [uuid]  (gallery/get-image uuid))
-  (GET "/gallery/:user" [user]  (gallery/get-user-gallery user))
-  (GET "/camera"        []      (p/camera-page))
-  (GET "/list"          []      (p/list-accounts (db/select-all-accounts)))
-  (GET "/register"      []      (p/register-page))
-  (POST "/make-account" req (do
-                              (db/make-account (:form-params req))
-                              (p/list-accounts (db/select-all-accounts))))
-  (POST "/upload-picc"  req (upload/save-image! "guy garvey" (get (:multipart-params req) "file")))
+  (GET  "/"              req      (p/index-page req))
+  (GET  "/login"         req      (p/login-page req))
+  (POST "/login"         req      (login/handler req))
+  (GET  "/pics/:uuid"    [uuid]   (gallery/get-image uuid))
+  (GET  "/gallery/:user" [user]   (gallery/get-user-gallery user))
+  (GET  "/camera"        req      (p/camera-page req))
+  (GET  "/list"          req      (p/list-accounts req (db/select-all-accounts)))
+  (GET  "/register"      req      (p/register-page req))
+  (POST "/make-account"  req      (do
+                                    (db/make-account (:form-params req))
+                                    (p/list-accounts req (db/select-all-accounts))))
+  (POST "/upload-picc"   req      (upload/save-image! "guy garvey" (get (:multipart-params req) "file")))
   (route/not-found "<h1>404</h1>"))
 
 (def app
   (-> app-routes
-      wrap-session
       (wrap-defaults (-> site-defaults
+                         (assoc-in [:session :store] (cookie-store))
                          (assoc-in [:security :anti-forgery] false)))))
 
 (defn -main

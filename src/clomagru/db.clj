@@ -14,6 +14,10 @@
   (get-in (sql/find-by-keys ds :accounts {:username name})
           [0 :accounts/id]))
 
+(defn get-username-by-uuid [id]
+  (get-in (sql/find-by-keys ds :accounts {:id id})
+          [0 :accounts/username]))
+
 (defn get-images-id-by-owner [name]
   (let [id (get-uuid-by-username name)]
     (sql/find-by-keys ds :files {:owner id})))

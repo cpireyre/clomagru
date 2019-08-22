@@ -2,7 +2,8 @@
   (:require [hiccup.core :as hiccup]
             [hiccup.form :as form]
             [hiccup.page :as page :refer [include-js html5]]
-            [clomagru.users :as users]))
+            [clomagru.users :as users]
+            [clomagru.db :as db]))
 
 (defn header [title]
   [:head
@@ -32,26 +33,30 @@
     [:br]
     [:button "Submit"]]])
 
-(def nav-bar
-  [:nav
-   [:ul
-    [:li [:a {:href "/"}         "Index"]]
-    [:li [:a {:href "/login"}    "Sign in"]]
-    [:li [:a {:href "/camera"}   "Take a photo"]]
-    [:li [:a {:href "/list"}     "See all users"]]
-    [:li [:a {:href "/register"} "Sign up"]]]
-   [:hr]])
+(defn nav-bar [{session :session}]
+  (let [uuid (:uuid session)
+        username (db/get-username-by-uuid uuid)]
+    [:nav
+     [:ul
+      [:li [:a {:href "/"}       "Index"]]
+      [:li [:a {:href "/camera"} "Take a photo"]]
+      [:li [:a {:href "/list"}   "See all users"]]
+      (if uuid
+        [:li (str "Hello, " username ".")]
+      '([:li [:a {:href "/register"} "Sign up"]]
+        [:li [:a {:href "/login"}    "Sign in"]]))]
+     [:hr]]))
 
 (def footer
   [:footer
    [:hr]
    [:p "Powered by Clojure or whatever."]])
 
-(defn register-page []
-  (html5 (header "Join Clomagru") nav-bar register-form footer))
+(defn register-page [req]
+  (html5 (header "Join Clomagru") (nav-bar req) register-form footer))
 
-(defn index-page []
-  (html5 (header "Clomagru home page") nav-bar
+(defn index-page [req]
+  (html5 (header "Clomagru home page") (nav-bar req)
                [:h1 "Clomagru"]
                [:h2 "Coming soon."]
                footer))
@@ -62,10 +67,10 @@
        [:time (str (java.util.Date. (:accounts/created_at user)))]
        "."])
 
-(defn list-accounts [accounts]
+(defn list-accounts [req accounts]
   (html5
     (header "They use Clomagru")
-    nav-bar
+    (nav-bar req)
     [:h1 "People on this site"]
     [:ol
      (for [user accounts]
@@ -85,8 +90,8 @@
    [:div {:id "app"}]
    [:script {:type "text/javascript" :src "app.js"}]])
 
-(defn camera-page []
-  (html5 (header "Take a photo") nav-bar camera pic-upload-form footer))
+(defn camera-page [req]
+  (html5 (header "Take a photo") (nav-bar req) camera pic-upload-form footer))
 
 (def login-form
   (form/form-to [:post "/login"]
@@ -98,5 +103,5 @@
      (form/password-field {:required true} "password")] [:br]
     (form/submit-button "Submit")]))
 
-(defn login-page []
-  (html5 (header "Sign in") nav-bar login-form footer))
+(defn login-page [req]
+  (html5 (header "Sign in") (nav-bar req) login-form footer))
