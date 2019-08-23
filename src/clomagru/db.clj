@@ -18,9 +18,8 @@
   (get-in (sql/find-by-keys ds :accounts {:id id})
           [0 :accounts/username]))
 
-(defn get-images-id-by-owner [name]
-  (let [id (get-uuid-by-username name)]
-    (sql/find-by-keys ds :files {:owner id})))
+(defn get-images-id-by-owner [owner-id]
+    (sql/find-by-keys ds :files {:owner owner-id}))
 
 (defn select-all-accounts []
   (sql/query ds ["select * from accounts"]))
@@ -70,11 +69,10 @@
     (when (and (users/valid-user? credentials) (unique-user? credentials))
       (create-account credentials))))
 
-(defn save-file! [{:keys [owner data type]}]
+(defn save-file! [{:keys [owner-uuid data type]}]
   (let [id         (java.util.UUID/randomUUID)
-        owner-uuid (get-uuid-by-username owner)
         now        (System/currentTimeMillis)]
-    (log/timelog-stdin "Saving" type "from" owner "as" id)
+    (log/timelog-stdin "Saving" type "from" owner-uuid "as" id)
     (sql/insert! ds :files {:id         id
                             :owner      owner-uuid
                             :type       type
@@ -83,7 +81,6 @@
 
 (defn get-image [uuid]
   (sql/get-by-id ds :files uuid))
-
 
 (defn get-pw-by-username [name]
   (get-in (sql/find-by-keys ds :accounts {:username name})

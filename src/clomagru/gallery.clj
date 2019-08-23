@@ -1,6 +1,7 @@
 (ns clomagru.gallery
   (:require [clomagru.db :as db]
             [clomagru.page :as p]
+            [clomagru.users :as users]
             [hiccup.core :as hiccup]
             [ring.util.http-response :refer :all])
   (:import java.io.ByteArrayInputStream))
@@ -28,16 +29,14 @@
                :width "250px"
                :height "250px"}]]]])
 
-(defn get-user-pics [user]
+(defn get-user-pics [user-uuid]
   (map (comp one-image #(str "/pics/" %) :files/id)
        (db/get-images-id-by-owner "guy garvey")))
 
-(defn get-user-gallery [user]
-  (let [pics (get-user-pics user)]
-    (hiccup/html (p/header (str user "'s gallery"))
-                 p/nav-bar
-                 [:main {:id "gallery"}
-                  [:h1 (str user)]
-                  [:ul
-                   pics]]
-                 p/footer)))
+(defn get-user-gallery [req]
+  (let [route-name (get-in req [:params :user])]
+    (if (users/valid-username? route-name)
+      (if-let [user-uuid (db/get-uuid-by-username route-name)]
+        (str "got the gallery for " route-name)
+        (str "looks like " route-name " ain't home"))
+      (str "no one's called that round here"))))

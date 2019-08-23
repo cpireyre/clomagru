@@ -21,14 +21,17 @@
   (GET  "/logout"        req      (login/wipe-session))
   (POST "/login"         req      (login/handler req))
   (GET  "/pics/:uuid"    [uuid]   (gallery/get-image uuid))
-  (GET  "/gallery/:user" [user]   (gallery/get-user-gallery user))
+  (GET  "/gallery/:user" req      (gallery/get-user-gallery req))
   (GET  "/camera"        req      (p/camera-page req))
-  (GET  "/list"          req      (p/list-accounts req (db/select-all-accounts)))
+  (GET  "/list"          req      (p/list-accounts req
+                                                   (db/select-all-accounts)))
   (GET  "/register"      req      (p/register-page req))
   (POST "/make-account"  req      (do
                                     (db/make-account (:form-params req))
                                     (p/list-accounts req (db/select-all-accounts))))
-  (POST "/upload-picc"   req      (upload/save-image! "guy garvey" (get (:multipart-params req) "file")))
+  (POST "/upload-picc"   req      (upload/save-image!
+                                    (get-in req [:session :uuid])
+                                    (get (:multipart-params req) "file")))
   (route/not-found "<h1>404</h1>"))
 
 (def app

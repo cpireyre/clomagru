@@ -24,7 +24,7 @@
               :type     "email"
               :required true}]]
     [:br]
-    [:label "Password: "
+    [:label "Password: "  ;; TODO: make length constraint explicit
      [:input {:name     "password"
               :type     "password"
               :required true}]]
