@@ -96,6 +96,18 @@ footer {
 
 #gallery>ul {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
+  margin-left: 5%;
+  margin-right: 5%;
   list-style-type: none;
 }
+
+#gallery>ul>li {
+  padding: 1%;
+}
+
+img {
+  object-fit: cover;
+}
+
