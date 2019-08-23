@@ -8,6 +8,7 @@
       true
       false)))
 
+(def actually-alnum-regex #"^\w+$")
 (def non-empty-string-alphanumeric
   "Generator for non-empty alphanumeric strings"
   (gen/such-that #(not= "" %)
@@ -34,7 +35,10 @@
     #(re-matches email-regex %)
     (fn [] email-gen)))
 
-(s/def ::username (s/and ::non-empty-alphanumeric #(< (count %) 29)))
+(s/def ::username (s/and
+                    ::non-empty-alphanumeric
+                    #(< (count %) 29)
+                    #(re-matches actually-alnum-regex %)))
 (s/def ::password (s/and string? not-too-short?))
 (s/def ::user (s/keys :req [::username ::email ::password]))
 
@@ -50,3 +54,6 @@
   "Same as valid-user? but does not require the ::email key."
   (and (s/valid? ::username (:username credentials))
        (s/valid? ::password (:password credentials))))
+
+(defn valid-username? [name-maybe]
+  (s/valid? ::username name-maybe))
