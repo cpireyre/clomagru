@@ -19,7 +19,10 @@
           [0 :accounts/username]))
 
 (defn get-images-id-by-owner [owner-id]
-    (sql/find-by-keys ds :files {:owner owner-id}))
+    (sort-by
+      :files/created_at
+      #(compare %2 %1)
+      (sql/find-by-keys ds :files {:owner owner-id})))
 
 (defn select-all-accounts []
   (sql/query ds ["select * from accounts"]))
@@ -93,3 +96,6 @@
     (when-let [hash-in-db (get-pw-by-username username)]
       (when (password/check password hash-in-db)
         (get-uuid-by-username username)))))
+
+(defn ten-latest-pics []
+  (sql/query ds ["select * from files order by created_at desc limit 10"]))
