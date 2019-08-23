@@ -6,9 +6,9 @@
             [clomagru.db :as db]
             [clomagru.login :as login]))
 
-(defn header [title]
+(defn header [title & rest]
   [:head
-   [:title title]
+   [:title title rest]
    [:link {:rel "stylesheet" :href "/styles.css"}]])
 
 (def register-form
@@ -62,7 +62,9 @@
                footer))
 
 (defn print-one-user [user]
-  [:p [:em (:accounts/username user)]
+  [:p [:em
+       [:a {:href (str "/gallery/" (:accounts/username user))}
+        (:accounts/username user)]]
        " signed up on "
        [:time (str (java.util.Date. (:accounts/created_at user)))]
        "."])

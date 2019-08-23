@@ -32,7 +32,7 @@
   (POST "/upload-picc"   req      (upload/save-image!
                                     (get-in req [:session :uuid])
                                     (get (:multipart-params req) "file")))
-  (route/not-found "<h1>404</h1>"))
+  (route/not-found "<h1>404</h1>")) ;; TODO: make a real 404 page
 
 (def app
   (-> app-routes

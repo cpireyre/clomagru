@@ -40,7 +40,7 @@ a {
 }
 
 ::selection {
-  background-color:  #434c5e;
+  background-color: #434c5e;
 }
 
 hr {
@@ -94,12 +94,8 @@ footer {
 
 /*  Gallery style.  */
 
-#gallery {
-}
-
 #gallery>ul {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
   list-style-type: none;
 }
-
