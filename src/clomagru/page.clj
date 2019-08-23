@@ -4,7 +4,8 @@
             [hiccup.page :as page :refer [include-js html5]]
             [clomagru.users :as users]
             [clomagru.db :as db]
-            [clomagru.login :as login]))
+            [clomagru.login :as login]
+            [clomagru.index :as index]))
 
 (defn header [title & rest]
   [:head
@@ -37,12 +38,12 @@
     [:nav
      [:ul
       (when username
-        [:li (str "Henlo, " username ".")])
+        [:li "Henlo, " [:a {:href (str "/gallery/" username)} username]])
       [:li [:a {:href "/"}       "Index"]]
       [:li [:a {:href "/camera"} "Take a photo"]]
       [:li [:a {:href "/list"}   "See all users"]]
       (if uuid
-        [:li [:a {:href "/logout"} "Log out"]]
+        [:li [:a {:href "/logout"}   "Log out"]]
       '([:li [:a {:href "/register"} "Sign up"]]
         [:li [:a {:href "/login"}    "Sign in"]]))]
      [:hr]]))
@@ -57,9 +58,7 @@
 
 (defn index-page [req]
   (html5 (header "Clomagru home page") (nav-bar req)
-               [:h1 "Clomagru"]
-               [:h2 "Coming soon."]
-               footer))
+         footer))
 
 (defn print-one-user [user]
   [:p [:em
@@ -69,15 +68,16 @@
        [:time (str (java.util.Date. (:accounts/created_at user)))]
        "."])
 
-(defn list-accounts [req accounts]
-  (html5
-    (header "They use Clomagru")
-    (nav-bar req)
-    [:h1 "People on this site"]
-    [:ol
-     (for [user accounts]
-       [:li (print-one-user user)])]
-    footer))
+(defn list-accounts [req]
+  (let [accounts (db/select-all-accounts)]
+    (html5
+      (header "They use Clomagru")
+      (nav-bar req)
+      [:h1 "People on this site"]
+      [:ol
+       (for [user accounts]
+         [:li (print-one-user user)])]
+      footer)))
 
 (def pic-upload-form
   [:form {:method "post" :action "upload-picc" :enctype "multipart/form-data"}

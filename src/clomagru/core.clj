@@ -23,12 +23,9 @@
   (GET  "/pics/:uuid"    [uuid]   (gallery/get-image uuid))
   (GET  "/gallery/:user" req      (gallery/get-user-gallery req))
   (GET  "/camera"        req      (p/camera-page req))
-  (GET  "/list"          req      (p/list-accounts req
-                                                   (db/select-all-accounts)))
+  (GET  "/list"          req      (p/list-accounts req))
   (GET  "/register"      req      (p/register-page req))
-  (POST "/make-account"  req      (do
-                                    (db/make-account (:form-params req))
-                                    (p/list-accounts req (db/select-all-accounts))))
+  (POST "/make-account"  req      (login/make-account-handler req))
   (POST "/upload-picc"   req      (upload/save-image!
                                     (get-in req [:session :uuid])
                                     (get (:multipart-params req) "file")))

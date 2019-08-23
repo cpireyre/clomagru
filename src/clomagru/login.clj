@@ -14,9 +14,12 @@
       (do
         (log/timelog-stdin user-uuid "logged in.")
         (-> (redirect "/")
-            (content-type "text/plain")
             (assoc :session new-session)))
       (str "Could not find this account or password didn't match."))))
+
+(defn make-account-handler [req]
+  (db/make-account (:form-params req))
+  (redirect "/list"))
 
 (defn wipe-session []
   (-> (redirect "/")
