@@ -35,6 +35,10 @@ body {
   text-align: center;
 }
 
+ul {
+  list-style-type: none;
+}
+
 a {
   color: #8fbcbb;
 }
@@ -59,7 +63,6 @@ em {
 nav>ul {
   display: flex;
   justify-content: space-evenly;
-  list-style-type: none;
 }
 
 nav>ul>li>a:hover {
@@ -100,7 +103,6 @@ footer {
   justify-content: center;
   margin-left: 5%;
   margin-right: 5%;
-  list-style-type: none;
 }
 
 #gallery>ul>li {
@@ -111,3 +113,14 @@ img {
   object-fit: cover;
 }
 
+/*    Home page style.  */
+#latest {
+  display: flex;
+}
+
+#latest>ul {
+  align-items: flex-start;
+}
+
+#latest>ul>li {
+}

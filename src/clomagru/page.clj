@@ -37,6 +37,7 @@
         username (db/get-username-by-uuid uuid)]
     [:nav
      [:ul
+      [:li [:strong "Clomagru"]]
       (when username
         [:li "Henlo, " [:a {:href (str "/gallery/" username)} username]])
       [:li [:a {:href "/"}       "Index"]]
@@ -56,8 +57,14 @@
 (defn register-page [req]
   (html5 (header "Join Clomagru") (nav-bar req) register-form footer))
 
+(def index-gallery
+  [:main#latest
+   [:ul
+    (index/recent-pics)]])
+
 (defn index-page [req]
   (html5 (header "Clomagru home page") (nav-bar req)
+         index-gallery
          footer))
 
 (defn print-one-user [user]
