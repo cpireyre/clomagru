@@ -133,10 +133,10 @@ img {
 /*    Home page style.  */
 #latest {
   display: flex;
+  flex-direction: column;
 }
 
 #latest>ul {
-  align-items: flex-start;
 }
 
 #latest>ul>li {

@@ -7,6 +7,28 @@
             [clomagru.login :as login]
             [clomagru.index :as index]))
 
+(defn nav-bar [{session :session}]
+  (let [uuid     (:uuid session)
+        username (db/get-username-by-uuid uuid)]
+    [:nav
+     [:ul
+      [:li [:strong [:a#sitename {:href "/"} "Clomagru"]]]
+      (when username
+        [:p
+         [:li "Henlo, " [:a {:href (str "/gallery/" username)} username "."]]
+         [:li [:a {:href "/camera"} "Take a photo"]]])
+      [:li [:a {:href "/list"}   "See all users"]]
+      (if uuid
+        [:li [:a {:href "/logout"}   "Log out"]]
+        '([:li [:a {:href "/register"} "Sign up"]]
+          [:li [:a {:href "/login"}    "Sign in"]]))]
+     [:hr]]))
+
+(def footer
+  [:footer
+   [:hr]
+   [:p "Powered by Clojure or whatever."]])
+
 (defn header [title & rest]
   [:head
    [:title title rest]
@@ -32,42 +54,6 @@
     [:br]
     [:button "Submit"]]])
 
-(defn nav-bar [{session :session}]
-  (let [uuid     (:uuid session)
-        username (db/get-username-by-uuid uuid)]
-    [:nav
-     [:ul
-      [:li [:strong [:a#sitename {:href "/"} "Clomagru"]]]
-      (when username
-        [:li "Henlo, " [:a {:href (str "/gallery/" username)} username]])
-      [:li [:a {:href "/camera"} "Take a photo"]]
-      [:li [:a {:href "/list"}   "See all users"]]
-      (if uuid
-        [:li [:a {:href "/logout"}   "Log out"]]
-      '([:li [:a {:href "/register"} "Sign up"]]
-        [:li [:a {:href "/login"}    "Sign in"]]))]
-     [:hr]]))
-
-(def footer
-  [:footer
-   [:hr]
-   [:p "Powered by Clojure or whatever."]])
-
-(defn register-page [req]
-  (html5 (header "Join Clomagru") (nav-bar req)
-         [:main register-form]
-         footer))
-
-(def index-gallery
-  [:main#latest
-   [:ul
-    (index/recent-pics)]])
-
-(defn index-page [req]
-  (html5 (header "Clomagru home page") (nav-bar req)
-         index-gallery
-         footer))
-
 (defn print-one-user [user]
   [:p [:em
        [:a {:href (str "/gallery/" (:accounts/username user))}
@@ -76,34 +62,12 @@
        [:time (str (java.util.Date. (:accounts/created_at user)))]
        "."])
 
-(defn list-accounts [req]
-  (let [accounts (db/select-all-accounts)]
-    (html5
-      (header "They use Clomagru")
-      (nav-bar req)
-      [:main
-       [:h1 "People on this site"]
-       [:ol
-        (for [user accounts]
-          [:li (print-one-user user)])]]
-      footer)))
-
 (def pic-upload-form
   [:form {:method "post" :action "upload-picc" :enctype "multipart/form-data"}
    [:fieldset
     [:legend "Choose an image"] 
     (form/file-upload {:accept "image/jpeg, image/png"} "file") [:br]
     (form/submit-button "Submit")]])
-
-(def camera
-  [:main
-   [:h1 "Look alive!"]
-   [:div {:id "app"}]
-   [:script {:type "text/javascript" :src "app.js"}]
-   pic-upload-form])
-
-(defn camera-page [req]
-  (html5 (header "Take a photo") (nav-bar req) camera footer))
 
 (def login-form
   (form/form-to [:post "/login"]
@@ -115,12 +79,46 @@
      (form/password-field {:required true} "password")] [:br]
     (form/submit-button "Submit")]))
 
-(defn login-page [req]
+(defn render-page [req title & xs]
   (html5
-    (header "Sign in")
+    (header title)
     (nav-bar req)
-    [:main
-     (if-let [username (db/get-username-by-uuid (get-in req [:session :uuid]))]
-       [:p (str "You're looking pretty logged in to me, " username ".")]
-       login-form)]
+    [:main xs]
     footer))
+
+(defn login-component [req]
+  (if-let [username (db/get-username-by-uuid (get-in req [:session :uuid]))]
+    [:p (str "You're looking pretty logged in to me, " username ".")]
+    login-form))
+
+(def index-gallery
+   [:ul#latest (index/recent-pics)])
+
+(defn accounts-list []
+  (let [accounts (db/select-all-accounts)]
+    [:section
+     [:h1 "People on this site"]
+     [:ol
+      (for [user accounts]
+        [:li (print-one-user user)])]]))
+
+(def camera
+  [:section
+   [:h1 "Look alive!"]
+   [:div {:id "app"}]
+   [:script {:type "text/javascript" :src "app.js"}]
+   pic-upload-form])
+
+
+;; TODO: Would be way cool to have a defroutes-style macro here.
+
+(defn camera-page [req]
+  (render-page req "Take a photo" camera))
+(defn list-accounts [req]
+  (render-page req "They use Clomagru." (accounts-list)))
+(defn login-page [req]
+  (render-page req "Sign in" (login-component req)))
+(defn register-page [req]
+  (render-page req "Join Clomagru" register-form))
+(defn index-page [req]
+  (render-page req "Welcome to Clomagru!" index-gallery))

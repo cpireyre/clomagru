@@ -39,7 +39,7 @@
     (html5 (p/header username)
            (p/nav-bar req)
            [:main#gallery
-            [:h1 username "'s gallery"]
+            [:h1 [:em username] "'s gallery"]
             [:ul (get-user-pics uuid)]]
            p/footer)))
 
