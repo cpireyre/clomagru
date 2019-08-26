@@ -26,9 +26,7 @@
   (GET  "/list"          req      (p/list-accounts req))
   (GET  "/register"      req      (p/register-page req))
   (POST "/make-account"  req      (login/make-account-handler req))
-  (POST "/upload-picc"   req      (upload/save-image!
-                                    (get-in req [:session :uuid])
-                                    (get (:multipart-params req) "file")))
+  (POST "/upload-picc"   req      (upload/save-image! req))
   (route/not-found "<h1>404</h1>")) ;; TODO: make a real 404 page
 
 (def app

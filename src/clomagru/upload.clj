@@ -11,10 +11,15 @@
 
 ;;  TODO:
 ;;  redirect post response with ring.response
-(defn save-image! [owner-uuid {:keys [tempfile filename content-type]}]
-  (db/save-file! {:owner-uuid owner-uuid
-                  :type       content-type
-                  :data       (file->byte-array tempfile)})
-  (let [username (db/get-username-by-uuid owner-uuid)]
-    (-> (redirect (str "/gallery/" username)))))
+(defn save-image! [req]
+  (let [owner-uuid (get-in req [:session :uuid])
+        file-info (get (:multipart-params req) "file")
+        tempfile (:tempfile file-info)
+        filename (:filename file-info)
+        content-type (:content-type file-info)]
+    (db/save-file! {:owner-uuid owner-uuid
+                    :type       content-type
+                    :data       (file->byte-array tempfile)})
+    (let [username (db/get-username-by-uuid owner-uuid)]
+      (-> (redirect (str "/gallery/" username))))))
 
