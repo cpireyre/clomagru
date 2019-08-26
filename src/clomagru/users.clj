@@ -1,13 +1,10 @@
 (ns clomagru.users
   (:require [clojure.spec.alpha :as s]
-            [clojure.spec.gen.alpha :as gen]
-            [clomagru.db :as db]))
+            [clojure.spec.gen.alpha :as gen]))
 
 (defn not-too-short? [s]
   (let [len (count s)]
-    (if (and (> len 6) (< len 256))
-      true
-      false)))
+    (and (> len 6) (< len 256))))
 
 (def actually-alnum-regex #"^\w+$")
 (def non-empty-string-alphanumeric
@@ -59,10 +56,3 @@
 (defn valid-username? [name-maybe]
   (s/valid? ::username name-maybe))
 
-(defn destructure-spec [qualified-map]
-  {:username (::username qualified-map)
-   :email (::email qualified-map)
-   :password (::password qualified-map)})
-
-(defn make-a-bunch-of-users []
-  (map (comp db/create-account destructure-spec first) (s/exercise ::user)))

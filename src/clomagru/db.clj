@@ -2,8 +2,8 @@
   (:require [next.jdbc.sql :as sql]
             [clojure.pprint :refer [pprint]]
             [crypto.password.pbkdf2 :as password]
-            [clomagru.users :as users]
             [clomagru.log :as log]
+            [clomagru.users :as users :only [valid-user?]]
             [clomagru.initdb :refer [init-datasource]]))
 
 ;;  "src/clomagru/db" directory needs to exist.
