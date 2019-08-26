@@ -1,6 +1,7 @@
 (ns clomagru.users
   (:require [clojure.spec.alpha :as s]
-            [clojure.spec.gen.alpha :as gen]))
+            [clojure.spec.gen.alpha :as gen]
+            [clomagru.db :as db]))
 
 (defn not-too-short? [s]
   (let [len (count s)]
@@ -57,3 +58,11 @@
 
 (defn valid-username? [name-maybe]
   (s/valid? ::username name-maybe))
+
+(defn destructure-spec [qualified-map]
+  {:username (::username qualified-map)
+   :email (::email qualified-map)
+   :password (::password qualified-map)})
+
+(defn make-a-bunch-of-users []
+  (map (comp db/create-account destructure-spec first) (s/exercise ::user)))
