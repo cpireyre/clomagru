@@ -37,10 +37,9 @@
         username (db/get-username-by-uuid uuid)]
     [:nav
      [:ul
-      [:li [:strong "Clomagru"]]
+      [:li [:strong [:a#sitename {:href "/"} "Clomagru"]]]
       (when username
         [:li "Henlo, " [:a {:href (str "/gallery/" username)} username]])
-      [:li [:a {:href "/"}       "Index"]]
       [:li [:a {:href "/camera"} "Take a photo"]]
       [:li [:a {:href "/list"}   "See all users"]]
       (if uuid
@@ -55,7 +54,9 @@
    [:p "Powered by Clojure or whatever."]])
 
 (defn register-page [req]
-  (html5 (header "Join Clomagru") (nav-bar req) register-form footer))
+  (html5 (header "Join Clomagru") (nav-bar req)
+         [:main register-form]
+         footer))
 
 (def index-gallery
   [:main#latest
@@ -80,10 +81,11 @@
     (html5
       (header "They use Clomagru")
       (nav-bar req)
-      [:h1 "People on this site"]
-      [:ol
-       (for [user accounts]
-         [:li (print-one-user user)])]
+      [:main
+       [:h1 "People on this site"]
+       [:ol
+        (for [user accounts]
+          [:li (print-one-user user)])]]
       footer)))
 
 (def pic-upload-form
@@ -97,10 +99,11 @@
   [:main
    [:h1 "Look alive!"]
    [:div {:id "app"}]
-   [:script {:type "text/javascript" :src "app.js"}]])
+   [:script {:type "text/javascript" :src "app.js"}]
+   pic-upload-form])
 
 (defn camera-page [req]
-  (html5 (header "Take a photo") (nav-bar req) camera pic-upload-form footer))
+  (html5 (header "Take a photo") (nav-bar req) camera footer))
 
 (def login-form
   (form/form-to [:post "/login"]
@@ -116,7 +119,8 @@
   (html5
     (header "Sign in")
     (nav-bar req)
-    (if-let [username (db/get-username-by-uuid (get-in req [:session :uuid]))]
-      [:p (str "You're looking pretty logged in to me, " username ".")]
-      login-form)
+    [:main
+     (if-let [username (db/get-username-by-uuid (get-in req [:session :uuid]))]
+       [:p (str "You're looking pretty logged in to me, " username ".")]
+       login-form)]
     footer))

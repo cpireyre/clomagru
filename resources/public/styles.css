@@ -43,6 +43,10 @@ a {
   color: #8fbcbb;
 }
 
+a:hover {
+  color: #a3be8c;
+}
+
 ::selection {
   background-color: #434c5e;
 }
@@ -65,7 +69,12 @@ nav>ul {
   justify-content: space-evenly;
 }
 
-nav>ul>li>a:hover {
+
+#sitename {
+  color: #88c0d0;
+}
+
+#sitename:hover {
   color: #a3be8c;
 }
 
@@ -89,10 +98,18 @@ fieldset {
 
 /*  Footer style. */
 
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
 footer {
-  bottom: 0;
-  right: 0;
-  position: fixed;
+  flex-shrink: 0;
+}
+
+main {
+  flex: 1 0 auto;
 }
 
 /*  Gallery style.  */
