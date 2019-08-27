@@ -7,10 +7,7 @@
             [clomagru.login :as login]
             [clomagru.index :as index]))
 
-(defn nav-bar [{session :session}]
-  (let [uuid     (:uuid session)
-        username (db/get-username-by-uuid uuid)]
-    [:nav
+(defn nav-bar [{session :session}] (let [uuid     (:uuid session) username (db/get-username-by-uuid uuid)] [:nav
      [:ul
       [:li [:strong [:a#sitename {:href "/"} "Clomagru"]]]
       (when username
@@ -40,6 +37,8 @@
     [:legend "Make an account"] [:br]
     [:label "Name: "
      [:input {:name     "username"
+              :pattern  "^[a-zA-Z0-9]+$"
+              :title    "Letters and numbers only."
               :required true}]]
     [:br]
     [:label "E-mail: "
@@ -47,12 +46,13 @@
               :type     "email"
               :required true}]]
     [:br]
-    [:label "Password: "  ;; TODO: make length constraint explicit
+    [:label "Password: "
      [:input {:name     "password"
+              :pattern  ".{7,}"
+              :title    "Seven characters or more."
               :type     "password"
-              :required true}]]
-    [:br]
-    [:button "Submit"]]])
+              :required true}]] 
+    [:br] [:button "Submit"]]])
 
 (defn register-component [req]
   (if (get-in req [:session :uuid])
@@ -121,12 +121,12 @@
     footer))
 
 (defn camera-page [req]
-  (render-page req "Take a photo" (camera req)))
+  (render-page req "Take a photo." (camera req)))
 (defn list-accounts [req]
   (render-page req "They use Clomagru." (accounts-list)))
 (defn login-page [req]
-  (render-page req "Sign in" (login-component req)))
+  (render-page req "Sign in." (login-component req)))
 (defn register-page [req]
-  (render-page req "Join Clomagru" (register-component req)))
+  (render-page req "Join Clomagru." (register-component req)))
 (defn index-page [req]
   (render-page req "Welcome to Clomagru!" (index-gallery)))

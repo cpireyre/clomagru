@@ -28,8 +28,8 @@
 /*  General style. */
 
 body {
-  background-color: #3b4252;
-  color: #d8dee9;
+  background-color: white;
+  color: #2e3440;
   font-family: sans-serif;
   font-size: large;
   text-align: center;
@@ -55,19 +55,19 @@ ul {
 }
 
 a {
-  color: #8fbcbb;
+  color: #5e81ac;
 }
 
 a:hover {
-  color: #a3be8c;
+  color: #4c566a;
 }
 
 ::selection {
-  background-color: #434c5e;
+  background-color: ;
 }
 
 hr {
-  border-bottom: 1px dotted #88c0d0;
+  border-bottom: 1px dotted ;
   border-left: none;
   border-right: none;
   border-top: none;
@@ -86,29 +86,33 @@ nav>ul {
 
 
 #sitename {
-  color: #88c0d0;
+  color: ;
 }
 
 #sitename:hover {
-  color: #a3be8c;
+  color: ;
 }
 
 /*  Forms style. */
-fieldset {
-  background-color: #2e3440;
-}
 
 button,
 input {
-  background-color: #3b4252;
-  border: 1px solid #4c566a;
-  color: #88c0d0;
+  background-color: white;
+  border: 1px solid #5e81ac;
+  color: #4c566a;
+}
+
+input:focus {
+  background-color: #eceff4;
 }
 
 fieldset {
-  border: 1px solid #4c566a;
+  background-color: #fafafa;
+  border: 1px outset #8fbcbb;
+  color: #4c566a;
   display: inline-block;
   text-align: right;
+  box-shadow: rgba(184, 194, 215, 0.65) 3px 3px 9px 0px;
 }
 
 /*  Footer style. */
@@ -120,6 +124,7 @@ body {
 }
 
 footer {
+  color: #3b4252;
   flex-shrink: 0;
 }
 
