@@ -18,8 +18,8 @@
 (defroutes app-routes
   (GET  "/"              req      (p/index-page req))
   (GET  "/login"         req      (p/login-page req))
-  (GET  "/logout"        req      (login/wipe-session))
   (POST "/login"         req      (login/handler req))
+  (GET  "/logout"        req      (login/wipe-session))
   (GET  "/pics/:uuid"    [uuid]   (gallery/get-image uuid))
   (GET  "/gallery/:user" req      (gallery/get-user-gallery req))
   (GET  "/camera"        req      (p/camera-page req))

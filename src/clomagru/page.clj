@@ -54,6 +54,11 @@
     [:br]
     [:button "Submit"]]])
 
+(defn register-component [req]
+  (if (get-in req [:session :uuid])
+    [:p "You already have an account!"]
+    register-form))
+
 (defn print-one-user [user]
   [:p [:em
        [:a {:href (str "/gallery/" (:accounts/username user))}
@@ -79,19 +84,12 @@
      (form/password-field {:required true} "password")] [:br]
     (form/submit-button "Submit")]))
 
-(defn render-page [req title & xs]
-  (html5
-    (header title)
-    (nav-bar req)
-    [:main xs]
-    footer))
-
 (defn login-component [req]
   (if-let [username (db/get-username-by-uuid (get-in req [:session :uuid]))]
     [:p (str "You're looking pretty logged in to me, " username ".")]
     login-form))
 
-(def index-gallery
+(defn index-gallery []
    [:ul#latest (index/recent-pics)])
 
 (defn accounts-list []
@@ -102,23 +100,33 @@
       (for [user accounts]
         [:li (print-one-user user)])]]))
 
-(def camera
-  [:section
-   [:h1 "Look alive!"]
-   [:div {:id "app"}]
-   [:script {:type "text/javascript" :src "app.js"}]
-   pic-upload-form])
+(defn camera [req]
+  (if (get-in req [:session :uuid])
+    [:section
+     [:h1 "Look alive!"]
+     [:div {:id "app"}]
+     [:script {:type "text/javascript" :src "app.js"}]
+     pic-upload-form]
+    [:section
+     [:p "You need to be logged in for that."]]))
 
 
 ;; TODO: Would be way cool to have a defroutes-style macro here.
 
+(defn render-page [req title & xs]
+  (html5
+    (header title)
+    (nav-bar req)
+    [:main xs]
+    footer))
+
 (defn camera-page [req]
-  (render-page req "Take a photo" camera))
+  (render-page req "Take a photo" (camera req)))
 (defn list-accounts [req]
   (render-page req "They use Clomagru." (accounts-list)))
 (defn login-page [req]
   (render-page req "Sign in" (login-component req)))
 (defn register-page [req]
-  (render-page req "Join Clomagru" register-form))
+  (render-page req "Join Clomagru" (register-component req)))
 (defn index-page [req]
-  (render-page req "Welcome to Clomagru!" index-gallery))
+  (render-page req "Welcome to Clomagru!" (index-gallery)))
