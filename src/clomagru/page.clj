@@ -115,6 +115,7 @@
   [:section
   [:h1 "404"]
   [:p "We can't find this."]
+  [:p [:a {:href "/"} "Go baq."]]
   [:img {:height "500px;"
          :width "500px;"
          :src "assets/04.png"}]])
@@ -147,5 +148,5 @@
                           :height "500px;"}]]))
 (defn index-page [req]
   (render-page req "Welcome to Clomagru!" (index-gallery)))
-(defn not-found-page [req]
-  (render-page req "404 not found." not-found))
+(defn not-found-page []
+  (html5 (header "404 not found.") [:main not-found] footer))
