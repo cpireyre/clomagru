@@ -35,6 +35,21 @@ body {
   text-align: center;
 }
 
+img {
+  height: 250px;
+  object-fit: cover;
+  transition-property: height object-fit width;
+  transition-duration: 0.3s;
+  transition-delay: 0s;
+  width: 250px;
+}
+
+img:hover {
+  height: 500px;
+  width: 500px;
+  object-fit: contain;
+}
+
 ul {
   list-style-type: none;
 }
@@ -117,6 +132,7 @@ main {
 #gallery>ul {
   display: flex;
   flex-wrap: wrap;
+  flex-direction: column;
   justify-content: center;
   margin-left: 5%;
   margin-right: 5%;
@@ -124,10 +140,6 @@ main {
 
 #gallery>ul>li {
   padding: 1%;
-}
-
-img {
-  object-fit: cover;
 }
 
 /*    Home page style.  */
