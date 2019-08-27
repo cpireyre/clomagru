@@ -111,6 +111,14 @@
      [:p "You need to be logged in for that."]]))
 
 
+(def not-found
+  [:section
+  [:h1 "404"]
+  [:p "We can't find this."]
+  [:img {:height "500px;"
+         :width "500px;"
+         :src "assets/04.png"}]])
+
 ;; TODO: Would be way cool to have a defroutes-style macro here.
 
 (defn render-page [req title & xs]
@@ -124,9 +132,20 @@
   (render-page req "Take a photo." (camera req)))
 (defn list-accounts [req]
   (render-page req "They use Clomagru." (accounts-list)))
+
 (defn login-page [req]
-  (render-page req "Sign in." (login-component req)))
+  (render-page req "Sign in." (login-component req) [:br]
+               [:p [:img {:src "assets/03.png"
+                      :width "500px;"
+                      :height "500px;"}]]))
+
 (defn register-page [req]
-  (render-page req "Join Clomagru." (register-component req)))
+  (render-page req "Join Clomagru." (register-component req)
+               [:br]
+               [:p [:img {:src "assets/01.png"
+                          :width "500px;"
+                          :height "500px;"}]]))
 (defn index-page [req]
   (render-page req "Welcome to Clomagru!" (index-gallery)))
+(defn not-found-page [req]
+  (render-page req "404 not found." not-found))

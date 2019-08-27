@@ -28,7 +28,7 @@
 
 (defn one-image [url]
   [:li [:p [:a {:href url}
-            [:img {:src url :width "250px" :height "250px"}]]]])
+            [:img.userpic {:src url :width "250px" :height "250px"}]]]])
 
 (defn get-user-pics [user-uuid]
   (map (comp one-image #(str "/pics/" %) :files/id)

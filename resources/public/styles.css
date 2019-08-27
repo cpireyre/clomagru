@@ -35,7 +35,7 @@ body {
   text-align: center;
 }
 
-img {
+img.userpic {
   height: 250px;
   object-fit: cover;
   transition-property: height object-fit width;
@@ -44,7 +44,7 @@ img {
   width: 250px;
 }
 
-img:hover {
+img.userpic:hover {
   height: 500px;
   width: 500px;
   object-fit: contain;
@@ -78,6 +78,10 @@ em {
 }
 
 /*  Nav bar style. */
+
+nav {
+  margin-bottom: 2em;
+}
 
 nav>ul {
   display: flex;

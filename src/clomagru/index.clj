@@ -2,7 +2,7 @@
   (:require [clomagru.db :as db]))
 
 (defn img-tag [pic-uuid]
-  [:img {:src (str "/pics/" pic-uuid)
+  [:img.userpic {:src (str "/pics/" pic-uuid)
          :width "250px"
          :height "250px"}])
 

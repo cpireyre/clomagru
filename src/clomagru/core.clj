@@ -27,7 +27,7 @@
   (GET  "/register"      req      (p/register-page req))
   (POST "/make-account"  req      (login/make-account-handler req))
   (POST "/upload-picc"   req      (upload/save-image! req))
-  (route/not-found "<h1>404</h1>")) ;; TODO: make a real 404 page
+  (route/not-found                (p/not-found-page nil))) ;; TODO: make a real 404 page
 
 (def app
   (-> app-routes
