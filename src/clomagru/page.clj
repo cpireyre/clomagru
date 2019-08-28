@@ -120,7 +120,7 @@
   [:p [:a {:href "/"} "Go baq."]]
   [:img {:height "500px;"
          :width "500px;"
-         :src "assets/04.png"}]])
+         :src "/assets/04.png"}]])
 
 ;; TODO: Would be way cool to have a defroutes-style macro here.
 
@@ -140,7 +140,7 @@
   (render-page req "Sign in."
                [:h1 "Log in to your account."]
                (login-component req) [:br]
-               [:p [:img {:src "assets/03.png"
+               [:p [:img {:src "/assets/03.png"
                       :width "500px;"
                       :height "500px;"}]]))
 
@@ -149,7 +149,7 @@
                [:h1 "Create your account."]
                (register-component req)
                [:br]
-               [:p [:img {:src "assets/01.png"
+               [:p [:img {:src "/assets/01.png"
                           :width "500px;"
                           :height "500px;"}]]))
 (defn index-page [req]
