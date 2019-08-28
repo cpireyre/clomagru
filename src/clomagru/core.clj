@@ -12,7 +12,8 @@
             [clomagru.gallery :as gallery]
             [clomagru.db :as db]
             [clomagru.login :as login]
-            [clomagru.key :as key])
+            [clomagru.key :as key]
+            [clomagru.token :as token])
   (:gen-class))
 
 (defroutes app-routes
@@ -25,9 +26,10 @@
   (GET  "/camera"        req      (p/camera-page req))
   (GET  "/list"          req      (p/list-accounts req))
   (GET  "/register"      req      (p/register-page req))
+  (GET  "/confirm/:tok"  [tok]    (token/confirm-account! tok))
   (POST "/make-account"  req      (login/make-account-handler req))
   (POST "/upload-picc"   req      (upload/save-image! req))
-  (route/not-found                (p/not-found-page))) ;; TODO: make a real 404 page
+  (route/not-found                (p/not-found-page)))
 
 (def app
   (-> app-routes

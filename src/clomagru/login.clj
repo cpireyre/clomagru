@@ -2,7 +2,7 @@
   (:require [clomagru.db :as db]
             [clomagru.users :as users]
             [clomagru.log :as log]
-            [ring.util.response :refer [content-type response redirect]]))
+            [ring.util.response :refer [redirect]]))
 
 ;;  TODO:
 ;; This is probably busted if already logged in but
@@ -19,7 +19,7 @@
 
 (defn make-account-handler [req]
   (db/make-account (:form-params req))
-  (redirect "/list"))
+  (redirect "/login"))
 
 (defn wipe-session []
   (-> (redirect "/")
