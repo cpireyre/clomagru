@@ -2,6 +2,7 @@
   (:require [clomagru.db :as db]
             [clomagru.users :as users]
             [clomagru.log :as log]
+            [clomagru.token :refer [token-confirmed?]]
             [ring.util.response :refer [redirect]]))
 
 ;;  TODO:
@@ -11,11 +12,13 @@
   (let [user-uuid (db/match-credentials params)
         new-session (assoc session :uuid user-uuid)]
     (if user-uuid
-      (do
-        (log/timelog-stdin user-uuid "logged in.")
-        (-> (redirect "/")
-            (assoc :session new-session)))
-      (str "Could not find this account or password didn't match."))))
+      (if (token-confirmed? user-uuid)
+        (do
+          (log/timelog-stdin user-uuid "logged in.")
+          (-> (redirect "/")
+              (assoc :session new-session)))
+        (str "Please confirm your e-mail address.")) ;; TODO: Use flash here.
+      (str "Could not find this account or password didn't match.")))) ;; TODO: Use flash here.
 
 (defn make-account-handler [req]
   (db/make-account (:form-params req))

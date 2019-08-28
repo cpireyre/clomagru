@@ -5,6 +5,16 @@
             [ring.util.response :refer [redirect]]
             [next.jdbc.sql :as sql]))
 
+(defn token-confirmed?
+  "Looks in database if the user with corresponding UUID
+  has confirmed their account."
+  [user-uuid]
+  (not-empty
+    (sql/query
+      ds
+      ["select * from accounts where id = ? and confirmed = 1"
+       user-uuid])))
+
 (defn save-token!
   "Writes the confirmation token with the correspond owner into datasource."
   [datasource owner token]
@@ -44,7 +54,7 @@
         (log/timelog-stdin "Couldn't delete token" token))
       deleted?)))
 
-(defn confirm-user! [owner]
+(defn confirm-in-db! [owner]
   (log/timelog-stdin "Confirming user" owner)
   (sql/update! ds :accounts {:confirmed 1} {:id owner}))
 
@@ -53,7 +63,7 @@
     (if-let [owner (get-owner-by-token token)]
       (do
         (log/timelog-stdin "Processing token" token)
-        (confirm-user! owner)
+        (confirm-in-db! owner)
         (delete-token! token)
         (redirect "/"))
       (redirect "/404"))

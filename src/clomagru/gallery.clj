@@ -48,5 +48,5 @@
     (if (users/valid-username? route-name)
       (if-let [user-uuid (db/get-uuid-by-username route-name)]
         (user-gallery user-uuid req)
-        (str "looks like " route-name " ain't home"))
-      (str "no one's called that round here"))))
+        (str "looks like " route-name " ain't home")) ;; TODO: Use flash here.
+      (str "no one's called that round here")))) ;; TODO: Use flash here.
