@@ -4,7 +4,8 @@
             [clomagru.users :as users]
             [hiccup.page :refer [html5]]
             [hiccup.core :as hiccup]
-            [ring.util.http-response :refer :all])
+            [ring.util.http-response :refer :all]
+            [ring.util.response :refer [redirect]])
   (:import java.io.ByteArrayInputStream))
 
 ;; this seems stupid
@@ -23,8 +24,8 @@
            (-> (ByteArrayInputStream. picdata)
                (ok)
                (content-type pictype)))
-      (str "<h1>404</h1>"))
-    (str "<h1>404!</h1>")))
+      (redirect "/404"))
+    (redirect "/404")))
 
 (defn one-image [url]
   [:li [:p [:a {:href url}
