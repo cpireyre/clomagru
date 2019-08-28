@@ -13,9 +13,9 @@
                                    :created_at (System/currentTimeMillis)}))
 
 (defn confirmation-email [username token]
-  (str "\tHello, " username ".\n"
+  (str "Henlo, " username ".\n"
        "You may want to visit this address:\n"
-       "http://localhost:3000/confirm/" token))
+       "\thttp://localhost:3000/confirm/" token))
 
 (defn send-confirm-email!
   "Sends an email to the user containing the account confirmation link."
