@@ -13,16 +13,17 @@
 ;;  type only goes up to 8 bytes where UUIDs need 16.
 ;;  I guess I'll just use strings.
 
-(defn create-accounts-table [datasource]
+(defn create-accounts-table! [datasource]
   (log/timelog-stdin "Creating accounts table in database.")
   (jdbc/execute! datasource ["CREATE TABLE accounts (
                               id TEXT PRIMARY KEY UNIQUE NOT NULL,
                               username TEXT UNIQUE NOT NULL,
                               email TEXT UNIQUE NOT NULL,
                               password TEXT NOT NULL,
-                              created_at INTEGER NOT NULL ) "]))
+                              created_at INTEGER NOT NULL,
+                              confirmed INTEGER DEFAULT 0 ) "]))
 
-(defn create-files-table [datasource]
+(defn create-files-table! [datasource]
   (log/timelog-stdin "Creating files table in database.")
   (jdbc/execute! datasource ["CREATE TABLE files (
                               id TEXT PRIMARY KEY UNIQUE NOT NULL,
@@ -31,11 +32,23 @@
                               data BLOB,
                               created_at INTEGER NOT NULL )"]))
 
-(defn init-datasource [database]
+;;  The token thing is made of very unsophisticated raw UUIDs,
+;;  because I don't really feel like learning a bunch of libraries
+;;  to implement a proper JSON Web Token solution at this time.
+
+(defn create-tokens-table! [datasource]
+  (log/timelog-stdin "Creating tokens table in database.")
+  (jdbc/execute! datasource ["CREATE TABLE tokens (
+                             id INTEGER PRIMARY KEY,
+                             token TEXT UNIQUE NOT NULL,
+                             owner TEXT UNIQUE NOT NULL,
+                             created_at INTEGER NOT NULL )"]))
+
+(defn init-datasource! [database]
   (log/timelog-stdin "Initializing" database)
   (if (not (.exists (clojure.java.io/as-file (:dbname database))))
     (let [datasource (jdbc/get-datasource database)]
-      (create-accounts-table datasource)
-      (create-files-table datasource)
-      datasource)
+      (create-accounts-table! datasource)
+      (create-files-table! datasource)
+      (create-tokens-table! datasource))
     (jdbc/get-datasource database)))

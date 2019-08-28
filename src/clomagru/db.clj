@@ -3,12 +3,13 @@
             [clojure.pprint :refer [pprint]]
             [crypto.password.pbkdf2 :as password]
             [clomagru.log :as log]
+            [clomagru.token :as token]
             [clomagru.users :as users :only [valid-user?]]
-            [clomagru.initdb :refer [init-datasource]]))
+            [clomagru.initdb :refer [init-datasource!]]))
 
 ;;  "src/clomagru/db" directory needs to exist.
-(def db {:dbtype "sqlite" :dbname "src/clomagru/db/database.db"})
-(def ds (init-datasource db))
+(defonce db {:dbtype "sqlite" :dbname "src/clomagru/db/database.db"})
+(defonce ds (init-datasource! db))
 
 (defn get-uuid-by-username [name]
   (get-in (sql/find-by-keys ds :accounts {:username name})
@@ -48,9 +49,12 @@
 
 (defn create-account [{:keys [username email password]}]
   (let [id   (java.util.UUID/randomUUID)
+        token   (java.util.UUID/randomUUID)
         hash (password/encrypt password)
         now  (System/currentTimeMillis)]
     (log/timelog-stdin "Creating account:" id username email hash)
+    (token/save-token! ds id token)
+    (token/send-confirm-email! email username token)
     (sql/insert! ds :accounts {:id         id
                                :username   username
                                :email      email
