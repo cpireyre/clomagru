@@ -5,11 +5,7 @@
             [clomagru.log :as log]
             [clomagru.token :as token]
             [clomagru.users :as users :only [valid-user?]]
-            [clomagru.initdb :refer [init-datasource!]]))
-
-;;  "src/clomagru/db" directory needs to exist.
-(defonce db {:dbtype "sqlite" :dbname "src/clomagru/db/database.db"})
-(defonce ds (init-datasource! db))
+            [clomagru.initdb :refer [ds]]))
 
 (defn get-uuid-by-username [name]
   (get-in (sql/find-by-keys ds :accounts {:username name})

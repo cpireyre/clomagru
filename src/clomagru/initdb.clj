@@ -2,6 +2,9 @@
   (:require [clomagru.log :as log]
             [next.jdbc :as jdbc]))
 
+;;  "src/clomagru/db" directory needs to exist.
+(defonce db {:dbtype "sqlite" :dbname "src/clomagru/db/database.db"})
+
 ;;   There is a decision point here. I'm choosing not to use an
 ;;  autoincrement primary key. Instead, I will provide UUIDs at
 ;;  the application layer.
@@ -50,5 +53,8 @@
     (let [datasource (jdbc/get-datasource database)]
       (create-accounts-table! datasource)
       (create-files-table! datasource)
-      (create-tokens-table! datasource))
+      (create-tokens-table! datasource)
+      datasource)
     (jdbc/get-datasource database)))
+
+(defonce ds (init-datasource! db))
