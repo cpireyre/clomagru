@@ -35,6 +35,14 @@ body {
   text-align: center;
 }
 
+h1 {
+  color: #4c566a;
+}
+
+main>p>img {
+  margin-top: 4em;
+}
+
 img.userpic {
   height: 250px;
   object-fit: cover;
@@ -80,7 +88,7 @@ em {
 /*  Nav bar style. */
 
 nav {
-  margin-bottom: 2em;
+  margin-bottom: 1em;
 }
 
 nav>ul {
@@ -154,5 +162,6 @@ main {
 /*    Home page style.  */
 #latest {
   display: flex;
+  flex-wrap: wrap;
   flex-direction: column;
 }

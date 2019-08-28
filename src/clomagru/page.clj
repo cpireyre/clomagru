@@ -90,12 +90,14 @@
     login-form))
 
 (defn index-gallery []
-   [:ul#latest (index/recent-pics)])
+  [:div
+   [:h1 "Some recents pics."]
+   [:ul#latest (index/recent-pics)]])
 
 (defn accounts-list []
   (let [accounts (db/select-all-accounts)]
     [:section
-     [:h1 "People on this site"]
+     [:h1 "People on this site."]
      [:ol
       (for [user accounts]
         [:li (print-one-user user)])]]))
@@ -135,13 +137,17 @@
   (render-page req "They use Clomagru." (accounts-list)))
 
 (defn login-page [req]
-  (render-page req "Sign in." (login-component req) [:br]
+  (render-page req "Sign in."
+               [:h1 "Log in to your account."]
+               (login-component req) [:br]
                [:p [:img {:src "assets/03.png"
                       :width "500px;"
                       :height "500px;"}]]))
 
 (defn register-page [req]
-  (render-page req "Join Clomagru." (register-component req)
+  (render-page req "Join Clomagru."
+               [:h1 "Create your account."]
+               (register-component req)
                [:br]
                [:p [:img {:src "assets/01.png"
                           :width "500px;"
