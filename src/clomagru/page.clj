@@ -24,7 +24,10 @@
 (def footer
   [:footer
    [:hr]
-   [:p "Powered by Clojure or whatever."]])
+   [:p "Powered by Clojure or whatever. "
+       "Illustrations by "
+       [:a {:href "https://absurd.design"} "absurd.design"]
+       "."]])
 
 (defn header [title & rest]
   [:head
