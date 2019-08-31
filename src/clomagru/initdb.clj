@@ -47,13 +47,23 @@
                              owner TEXT UNIQUE NOT NULL,
                              created_at INTEGER NOT NULL )"]))
 
+(defn create-comments-table! [datasource]
+  (log/timelog-stdin "Creating comments table in database.")
+  (jdbc/execute! datasource ["CREATE TABLE comments (
+                             id INTEGER PRIMARY KEY,
+                             comment TEXT NOT NULL,
+                             poster_uuid TEXT NOT NULL,
+                             created_at INTEGER NOT NULL,
+                             pic_uuid TEXT NOT NULL ) "]))
+
 (defn init-datasource! [database]
   (log/timelog-stdin "Initializing" database)
   (if (not (.exists (clojure.java.io/as-file (:dbname database))))
     (let [datasource (jdbc/get-datasource database)]
-      (create-accounts-table! datasource)
       (create-files-table! datasource)
       (create-tokens-table! datasource)
+      (create-accounts-table! datasource)
+      (create-comments-table! datasource)
       datasource)
     (jdbc/get-datasource database)))
 

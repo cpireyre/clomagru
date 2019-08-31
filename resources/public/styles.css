@@ -169,3 +169,23 @@ main {
   flex-wrap: wrap;
   flex-direction: column;
 }
+
+.index-pic {
+  display: flex;
+  flex-direction: row;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.comments {
+  display: flex;
+  flex-direction: column;
+  align-self: flex-end;
+  text-align: right;
+  font-size: 0.8em;
+  max-width: 50%;
+  overflow-wrap: break-word;
+}

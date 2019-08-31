@@ -31,6 +31,7 @@
   (GET  "/confirm/:tok"  [tok]               (token/confirm-account! tok)) ;; as-uuid here
   (POST "/make-account"  req                 (login/make-account-handler req))
   (POST "/upload-picc"   req                 (upload/save-image! req))
+  (POST "/comment-picc"  req                 (str req))
   (route/not-found                           (p/not-found-page)))
 
 (def app
