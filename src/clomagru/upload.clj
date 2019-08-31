@@ -9,8 +9,6 @@
     (clojure.java.io/copy input buffer)
     (.toByteArray buffer)))
 
-;;  TODO:
-;;  redirect post response with ring.response
 (defn save-image! [req]
   (if (get-in req [:session :uuid])
     (let [owner-uuid (get-in req [:session :uuid])
