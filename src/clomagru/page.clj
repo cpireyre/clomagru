@@ -95,7 +95,8 @@
 (defn index-gallery []
   [:div
    [:h1 "Some recents pics."]
-   [:ul#latest (index/recent-pics)]])
+   [:div {:id "app"}]
+   [:script {:type "text/javascript" :src "app.js"}]])
 
 (defn accounts-list []
   (let [accounts (db/select-all-accounts)]
@@ -109,8 +110,6 @@
   (if (get-in req [:session :uuid])
     [:section
      [:h1 "Look alive!"]
-     [:div {:id "app"}]
-     [:script {:type "text/javascript" :src "app.js"}]
      pic-upload-form]
     [:section
      [:p "You need to be logged in for that."]]))

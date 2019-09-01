@@ -167,12 +167,6 @@ main {
 #latest {
   display: flex;
   flex-wrap: wrap;
-  flex-direction: column;
-}
-
-.index-pic {
-  display: flex;
-  flex-direction: row;
 }
 
 .column {

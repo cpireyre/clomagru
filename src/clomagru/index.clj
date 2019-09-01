@@ -32,8 +32,7 @@
     [:li "french grils"]
     [:li "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj"]])
 
-
-(defn display-pic [{:keys [id owner date]}]
+(defn display-pic [{:keys [files/id files/owner files/date]}]
   [:li {:class "index-pic"}
    [:div {:class "column"}
     [:p [:em owner]]
@@ -43,6 +42,3 @@
     (comments id)
     [:hr]
     (comment-form id)]])
-
-(defn recent-pics []
-  (map (comp display-pic get-pic-map) (db/ten-latest-pics)))

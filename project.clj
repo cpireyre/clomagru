@@ -7,6 +7,7 @@
                  [org.clojure/clojurescript "1.10.520"]
                  [org.clojure/test.check "0.10.0"]
                  [com.cognitect/transit-clj "0.8.313"]
+                 [com.cognitect/transit-cljs "0.8.256"]
                  [ring "1.7.1"]
                  [metosin/ring-http-response "0.9.1"]
                  [ring/ring-defaults "0.3.2"]
@@ -16,6 +17,7 @@
                  [org.xerial/sqlite-jdbc "3.28.0"]
                  [crypto-password "0.2.1"]
                  [reagent "0.8.1"]
+                 [cljs-http "0.1.46"]
                  [com.draines/postal "2.0.3"]]
   :repl-options {:init-ns clomagru.core}
   :main ^:skip-aot clomagru.core

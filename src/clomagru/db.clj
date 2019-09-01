@@ -101,5 +101,5 @@
   (sql/query ds ["select * from files order by created_at desc limit 10"]))
 
 (defn five-pics-from-offset [offset]
-  (sql/query ds [(str "select * from files order by created_at desc limit 5 offset "
+  (sql/query ds [(str "select id, owner, created_at from files order by created_at desc limit 5 offset "
                       offset)]))

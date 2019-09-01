@@ -66,4 +66,4 @@
         pics (db/five-pics-from-offset page-offset)]
     (-> (transit-str pics)
         (ok)
-        (content-type "application/json"))))
+        (content-type "text/plain"))))
