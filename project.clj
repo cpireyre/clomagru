@@ -18,7 +18,13 @@
                  [crypto-password "0.2.1"]
                  [reagent "0.8.1"]
                  [cljs-http "0.1.46"]
-                 [com.draines/postal "2.0.3"]]
+                 [com.draines/postal "2.0.3"]
+                 [com.bhauman/figwheel-main "0.2.3"]
+                 [com.bhauman/rebel-readline-cljs "0.1.4"]]
+  :resource-paths ["src-cljs" "resources" "target"]
+  :aliases {"fig" ["trampoline" "run" "-m" "figwheel.main"]
+            "build-dev" ["trampoline" "run" "-m" "figwheel.main"
+                         "-b" "dev" "-r"]}
   :repl-options {:init-ns clomagru.core}
   :main ^:skip-aot clomagru.core
   :target-path "target/%s"

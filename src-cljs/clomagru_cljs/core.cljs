@@ -6,6 +6,8 @@
             [cljs-http.client :as http]
             [cljs.core.async :refer [<!]]))
 
+(enable-console-print!)
+
 (defn page-url [pagenum]
   (str "http://localhost:3000/page/" pagenum))
 
