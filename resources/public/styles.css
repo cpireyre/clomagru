@@ -39,12 +39,10 @@ h1 {
   color: #4c566a;
 }
 
-@media only screen and (max-width: 1366px)
-{
-  img {
-    height: 250px;
-    width: 250px;
-  }
+img {
+  height: 250px;
+  width: 250px;
+  border: 2px outset lightgrey;
 }
 
 img.userpic {
