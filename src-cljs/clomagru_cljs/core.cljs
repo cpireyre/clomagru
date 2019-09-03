@@ -24,13 +24,35 @@
   (swap! page-num inc)
   (get-page! @page-num pics))
 
+(defn prev-page! [pics page-num]
+  (swap! page-num dec)
+  (get-page! @page-num pics))
+
 (get-page! @page-num displayed-pics)
 
+(defn prev-button [pics pg]
+  (when (> @pg 1)
+    [:input {:type "button"
+             :class "prev"
+             :accesskey "h"
+             :value "⟵ Previous page"
+             :on-click #(prev-page! pics pg)}]))
+
+(defn next-button [pics pg]
+  (when (= (count @pics) 5)
+    [:input {:type "button"
+             :class "next"
+             :accesskey "l"
+             :value "Next page ⟶"
+             :on-click #(next-page! pics pg)}]))
+
 (defn gallery []
-  [:main#latest
-   [:input {:type "button" :value "next page"
-            :on-click #(next-page! displayed-pics page-num)}]
-   (map (comp index/img-tag :files/id) @displayed-pics) ])
+  [:main#pagination
+   [:div
+    (prev-button displayed-pics page-num)
+    (next-button displayed-pics page-num)]
+   [:div#latest
+    (map (comp index/img-tag :files/id) @displayed-pics)]])
 
 (r/render [gallery]
           (js/document.getElementById "app"))

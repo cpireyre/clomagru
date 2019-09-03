@@ -164,9 +164,15 @@ main {
 }
 
 /*    Home page style.  */
+
 #latest {
   display: flex;
+  flex-direction: column;
   flex-wrap: wrap;
+}
+
+#latest>img {
+  margin: 0.3em;
 }
 
 .column {
@@ -182,4 +188,26 @@ main {
   font-size: 0.8em;
   max-width: 50%;
   overflow-wrap: break-word;
+}
+
+#pagination {
+  position: relative;
+}
+
+/*  It doesn't display properly without a border?! */
+#pagination>div {
+  margin: 2em;
+  border: 1px solid white;
+}
+
+#pagination>div>.next {
+  margin-right: 3em;
+  position: absolute;
+  right: 0;
+}
+
+#pagination>div>.prev {
+  left: 0;
+  margin-left: 3em;
+  position: absolute;
 }
