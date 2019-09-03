@@ -15,3 +15,5 @@ resources/public/goog
 *.db
 .nrepl-history
 src/clomagru/key.clj
+cookie.txt
+.rebel_readline_history
