@@ -41,8 +41,10 @@
                                    (cookie-store {:key key/store-key}))
                          (assoc-in [:security :anti-forgery] false)))))
 
+(def reload-app (wrap-reload #'app))
+
 (defn -main
   "Turns on web server."
   [& args]
   (println "Starting server.")
-  (run-jetty (wrap-reload #'app) {:port 3000}));live reload whilst developping
+  (run-jetty reload-app {:port 3000}));live reload whilst developping

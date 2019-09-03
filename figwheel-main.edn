@@ -1,4 +1,5 @@
 {:ring-server-options {:port 3000}
- :ring-handler clomagru.core/app
+ :ring-handler clomagru.core/reload-app
  :watch-dirs ["src-cljs"]
- :css-dirs ["resources/public/"]}
+ :css-dirs ["resources/public/"]
+ :target-dir "resources" }

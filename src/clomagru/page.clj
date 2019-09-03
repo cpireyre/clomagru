@@ -96,7 +96,7 @@
   [:div
    [:h1 "Some recents pics."]
    [:div {:id "app"}]
-   [:script {:type "text/javascript" :src "app.js"}]])
+   [:script {:type "text/javascript" :src "cljs-out/dev-main.js"}]])
 
 (defn accounts-list []
   (let [accounts (db/select-all-accounts)]
