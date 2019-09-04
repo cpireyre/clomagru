@@ -51,8 +51,9 @@
    [:div
     (prev-button displayed-pics page-num)
     (next-button displayed-pics page-num)]
-   [:div#latest
-    (map (comp index/img-tag :files/id) @displayed-pics)]])
+   [:p (str @displayed-pics)]
+   [:section
+    (map index/pic-and-comment @displayed-pics)]])
 
 (r/render [gallery]
           (js/document.getElementById "app"))

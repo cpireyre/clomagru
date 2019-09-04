@@ -97,9 +97,33 @@
       (when (password/check password hash-in-db)
         (get-uuid-by-username username)))))
 
-(defn ten-latest-pics []
-  (sql/query ds ["select * from files order by created_at desc limit 10"]))
+(defn assoc-poster-name [comment-map]
+  (let [poster-name
+        (get-username-by-uuid (:comments/poster_uuid comment-map))]
+    (assoc comment-map :comments/poster poster-name)))
+
+(defn get-pic-comments [pic-uuid]
+  (->> (sql/query ds ["select * from comments where pic_uuid = ?" pic-uuid])
+      (map assoc-poster-name)))
+
+(defn add-comments [pic-map]
+  (assoc pic-map :files/comments
+         (get-pic-comments (:files/id pic-map))))
+
+(defn add-username [pic-map]
+  (assoc pic-map
+         :files/username
+         (get-username-by-uuid (:files/owner pic-map))))
+
+(defn add-date [pic-map]
+  (assoc pic-map
+         :files/date
+         (subs (str (java.util.Date. (:files/created_at pic-map)))
+               0 16)))
 
 (defn five-pics-from-offset [offset]
-  (sql/query ds [(str "select id, owner, created_at from files order by created_at desc limit 5 offset "
-                      offset)]))
+  (let [pics (sql/query ds [(str "select id, owner, created_at "
+                                 "from files order by created_at desc "
+                                 "limit 5 offset "
+                                 offset)])]
+  (map (comp add-comments add-username add-date) pics)))

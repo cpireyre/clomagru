@@ -42,7 +42,6 @@ h1 {
 img {
   height: 250px;
   width: 250px;
-  border: 2px outset lightgrey;
 }
 
 img.userpic {
@@ -163,29 +162,52 @@ main {
 
 /*    Home page style.  */
 
-#latest {
+main>section {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
 }
 
-#latest>img {
-  margin: 0.3em;
+main>section>article {
+  background-color: #eceff4;
+  box-shadow: rgba(184, 194, 215, 0.65) 3px 3px 9px 0px;
+  display: flex;
+  justify-content: space-between;
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-bottom: 2vh;
+  padding-left: 10%;
+  padding-right: 10%;
 }
 
 .column {
   display: flex;
   flex-direction: column;
+  text-align: left;
 }
 
 .comments {
+  align-self: flex-end;
   display: flex;
   flex-direction: column;
-  align-self: flex-end;
-  text-align: right;
   font-size: 0.8em;
   max-width: 50%;
   overflow-wrap: break-word;
+  text-align: right;
+  margin-bottom: 2vh;
+}
+
+.comments>ul>li {
+  margin-top: -0.8em;
+  margin-bottom: -0.8em;
+}
+
+.column>p>time {
+  font-size: 0.75em;
+}
+
+.column>p {
+  text-align: center;
 }
 
 #pagination {

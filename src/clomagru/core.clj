@@ -14,7 +14,8 @@
             [clomagru.db :as db]
             [clomagru.login :as login]
             [clomagru.key :as key]
-            [clomagru.token :as token])
+            [clomagru.token :as token]
+            [clomagru.comment :as comment])
   (:gen-class))
 
 (defroutes app-routes
@@ -31,7 +32,7 @@
   (GET  "/confirm/:tok"  [tok]               (token/confirm-account! tok)) ;; as-uuid here
   (POST "/make-account"  req                 (login/make-account-handler req))
   (POST "/upload-picc"   req                 (upload/save-image! req))
-  (POST "/comment-picc"  req                 (str req))
+  (POST "/comment-picc"  req                 (comment/post-comment! req))
   (route/not-found                           (p/not-found-page)))
 
 (def app
