@@ -63,7 +63,7 @@
     register-form))
 
 (defn print-one-user [user]
-  [:p [:em
+  [:p [:strong
        [:a {:href (str "/gallery/" (:accounts/username user))}
         (:accounts/username user)]]
        " signed up on "

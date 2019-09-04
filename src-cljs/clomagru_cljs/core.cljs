@@ -51,7 +51,7 @@
    [:div
     (prev-button displayed-pics page-num)
     (next-button displayed-pics page-num)]
-   [:p (str @displayed-pics)]
+   ;[:p (str @displayed-pics)]
    [:section
     (map index/pic-and-comment @displayed-pics)]])
 

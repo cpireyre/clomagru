@@ -22,17 +22,15 @@
   (let [poster (:comments/poster comment-map)
         comment (:comments/comment comment-map)]
     ^{:key (gensym comment-map)}
-    [:li
-     [:p [:strong poster] ": " comment]]))
+    [:li [:p [:strong poster] ": " comment]]))
 
 (defn pic-and-comment [pic-map]
   (let [pic-uuid (:files/id pic-map)]
-    [:article
+    [:article {:class "card"}
      [:div {:class "column"}
-      [:p [:em (:files/username pic-map)]]
+      [:p [:strong (:files/username pic-map)]]
       (img-tag pic-uuid)
       [:p [:time (:files/date pic-map)]]]
      [:div {:class "comments"}
-      [:ul
-       (map print-comment (:files/comments pic-map))]
+      [:ul (map print-comment (:files/comments pic-map))]
       (comment-form pic-uuid)]]))
