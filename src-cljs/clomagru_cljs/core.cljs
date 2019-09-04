@@ -34,7 +34,7 @@
   (when (> @pg 1)
     [:input {:type "button"
              :class "prev"
-             :accesskey "h"
+             :access-key "h"
              :value "⟵ Previous page"
              :on-click #(prev-page! pics pg)}]))
 
@@ -42,18 +42,20 @@
   (when (= (count @pics) 5)
     [:input {:type "button"
              :class "next"
-             :accesskey "l"
+             :access-key "l"
              :value "Next page ⟶"
              :on-click #(next-page! pics pg)}]))
+
+
+(defn make-comments [state]
+  (map index/pic-and-comment @state))
 
 (defn gallery []
   [:main#pagination
    [:div
     (prev-button displayed-pics page-num)
     (next-button displayed-pics page-num)]
-   ;[:p (str @displayed-pics)]
-   [:section
-    (map index/pic-and-comment @displayed-pics)]])
+   [:section (make-comments displayed-pics)]])
 
 (r/render [gallery]
           (js/document.getElementById "app"))

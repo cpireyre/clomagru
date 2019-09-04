@@ -103,8 +103,9 @@
     (assoc comment-map :comments/poster poster-name)))
 
 (defn get-pic-comments [pic-uuid]
-  (->> (sql/query ds ["select * from comments where pic_uuid = ?" pic-uuid])
-      (map assoc-poster-name)))
+  (->> (sql/query ds ["select comment, poster_uuid from comments where pic_uuid = ?" pic-uuid])
+      (map assoc-poster-name)
+      (map #(dissoc % :comments/poster_uuid))))
 
 (defn add-comments [pic-map]
   (assoc pic-map :files/comments
