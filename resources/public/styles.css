@@ -187,14 +187,14 @@ main>section>article {
 
 .comments {
   align-self: flex-end;
+  justify-content: space-between;
   display: flex;
   flex-direction: column;
   font-size: 1.7vw;
   max-width: 25vw;
   overflow-wrap: break-word;
   text-align: right;
-  margin-bottom: 8vh;
-  margin-left: 2em;
+  margin: 1.5vw;
 }
 
 .comments>ul>li {
