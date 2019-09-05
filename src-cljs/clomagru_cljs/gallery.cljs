@@ -46,7 +46,7 @@
   (let [poster  (:comments/poster  comment-map)
         comment (:comments/comment comment-map)]
     ^{:key (gensym comment-map)}
-    [:li [:p [:strong poster] ": " comment]]))
+    [:li [:strong poster]  [:span comment]]))
 
 (defn pic-and-comment [pic-map]
   (let [pic-uuid (:files/id pic-map)]

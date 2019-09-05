@@ -198,8 +198,14 @@ main>section>article {
 }
 
 .comments>ul>li {
-  margin-top: -0.8em;
-  margin-bottom: -0.8em;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+.comments>ul>li>span {
+  color: #4c566a;
+  margin-left: 1vw;
 }
 
 @media only screen and (max-width: 589px) {

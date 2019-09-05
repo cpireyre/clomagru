@@ -103,7 +103,12 @@
     (assoc comment-map :comments/poster poster-name)))
 
 (defn get-pic-comments [pic-uuid]
-  (->> (sql/query ds ["select comment, poster_uuid from comments where pic_uuid = ?" pic-uuid])
+  (->> (sql/query ds
+                  [(str "select comment, poster_uuid "
+                        "from comments where pic_uuid = ? "
+                        "order by created_at desc "
+                        "limit 7")
+                   pic-uuid])
       (map assoc-poster-name)
       (map #(dissoc % :comments/poster_uuid))))
 
