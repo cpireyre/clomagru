@@ -5,7 +5,7 @@
             [ring.middleware.session.cookie :refer [cookie-store]]
             [ring.middleware.anti-forgery :refer :all]
             [ring.middleware.reload :refer [wrap-reload]]
-            [compojure.core :refer [defroutes GET POST]]
+            [compojure.core :refer [defroutes GET POST PUT]]
             [compojure.route :as route]
             [compojure.coercions :refer [as-int]]
             [clomagru.page :as p]
@@ -15,7 +15,8 @@
             [clomagru.login :as login]
             [clomagru.key :as key]
             [clomagru.token :as token]
-            [clomagru.comment :as comment])
+            [clomagru.comment :as comment]
+            [clomagru.accountsettings :as settings])
   (:gen-class))
 
 (defroutes app-routes
@@ -23,6 +24,7 @@
   (GET  "/login"         req                 (p/login-page req))
   (POST "/login"         req                 (login/handler req))
   (GET  "/logout"        req                 (login/wipe-session))
+  (PUT  "/change-info"   req                 (settings/handler req))
   (GET  "/pics/:uuid"    [uuid]              (gallery/get-image uuid)) ;; as-uuid here
   (GET  "/gallery/:user" req                 (gallery/get-user-gallery req))
   (GET  "/camera"        req                 (p/camera-page req))
