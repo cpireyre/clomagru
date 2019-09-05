@@ -4,9 +4,9 @@
             [clomagru.index :as index]
             [cognitect.transit :as t]
             [cljs-http.client :as http]
-            [cljs.core.async :refer [<!]]))
+            [cljs.core.async :as async :refer [<! take!]]))
 
-(enable-console-print!)
+(def chan (async/chan))
 
 (defn page-url [pagenum]
   (str "http://localhost:3000/page/" pagenum))
@@ -47,15 +47,42 @@
              :on-click #(next-page! pics pg)}]))
 
 
-(defn make-comments [state]
-  (map index/pic-and-comment @state))
+(defn make-cards [state chan]
+  (map #(index/card % chan) @state))
+
+(defn get-map-to-update [map to-update]
+  (first (filter #(= % to-update) map)))
+
+(defn update-map [to-update comment]
+  (assoc-in to-update [:files/comments]
+            (conj (:files/comments to-update)
+                    {:comments/comment (:comment comment)
+                     :comments/poster (:poster-name comment)})))
+
+(defn remove-map [state rmap]
+  (remove #(= % rmap) state))
+
+(defn merge-async-comment [state comment]
+  (let [pic-uuid (:pic_uuid comment)
+        map-to-update (-> (filter #(= (:files/id %) pic-uuid) @state)
+                          (first))]
+    (prn map-to-update)
+    (prn comment)
+    (prn (type @state))
+    (swap! state #(-> (merge % (update-map map-to-update comment))
+                      (remove-map map-to-update)))))
+
+(go (loop []
+      (let [comment (<! chan)]
+        (merge-async-comment displayed-pics comment))
+      (recur)))
 
 (defn gallery []
   [:main#pagination
    [:div
     (prev-button displayed-pics page-num)
     (next-button displayed-pics page-num)]
-   [:section (make-comments displayed-pics)]])
+   [:section (make-cards displayed-pics chan)]])
 
 (r/render [gallery]
           (js/document.getElementById "app"))

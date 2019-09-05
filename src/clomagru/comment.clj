@@ -29,7 +29,9 @@
                           :comment     comment}]
         (sql/insert! ds :comments comment-data)
         (log/timelog-stdin "Comment:" comment-data)
-        (-> (gallery/transit-str comment-data)
+        (-> comment-data
+            (assoc :poster-name (db/get-username-by-uuid poster-uuid))
+            (gallery/transit-str)
             (response/response)
             (response/status 201)
             (response/content-type "text/plain"))))
