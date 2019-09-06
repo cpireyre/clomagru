@@ -37,7 +37,10 @@
                     ::non-empty-alphanumeric
                     #(< (count %) 29)
                     #(re-matches actually-alnum-regex %)))
+(s/def ::new-username ::username)
+(s/def ::new-email ::email)
 (s/def ::password (s/and string? not-too-short?))
+(s/def ::new-password (s/and string? not-too-short?))
 (s/def ::user (s/keys :req [::username ::email ::password]))
 
 (defn gen-one-user []
@@ -46,7 +49,7 @@
 (defn valid-user? [credentials]
   (and (s/valid? ::username (:username credentials))
        (s/valid? ::password (:password credentials))
-       (s/valid? ::email (:email credentials))))
+       (s/valid? ::email    (:email credentials))))
 
 (defn valid-credentials? [credentials]
   "Same as valid-user? but does not require the ::email key."
@@ -56,3 +59,9 @@
 (defn valid-username? [name-maybe]
   (s/valid? ::username name-maybe))
 
+(s/def ::patch-request
+  (s/keys :req-un [::username ::password
+                   (or ::new-username ::new-email ::new-password)]))
+
+(defn valid-patch-request? [req]
+  (s/valid? ::patch-request req))

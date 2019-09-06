@@ -11,6 +11,10 @@
   (get-in (sql/find-by-keys ds :accounts {:username name})
           [0 :accounts/id]))
 
+(defn get-email-by-uuid [uuid]
+  (get-in (sql/find-by-keys ds :accounts {:id uuid})
+          [0 :accounts/email]))
+
 (defn get-username-by-uuid [id]
   (get-in (sql/find-by-keys ds :accounts {:id id})
           [0 :accounts/username]))
