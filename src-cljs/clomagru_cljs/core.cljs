@@ -9,7 +9,7 @@
 (def chan (async/chan))
 
 (defn page-url [pagenum]
-  (str "http://localhost:3000/page/" pagenum))
+  (str "http://10.11.11.8" pagenum))
 
 (defn get-page! [page state]
   (go (let [r        (t/reader :json)

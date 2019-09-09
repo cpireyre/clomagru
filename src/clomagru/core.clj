@@ -5,6 +5,7 @@
             [ring.middleware.session.cookie :refer [cookie-store]]
             [ring.middleware.anti-forgery :refer :all]
             [ring.middleware.reload :refer [wrap-reload]]
+            [ring.middleware.cors :refer [wrap-cors]]
             [compojure.core :refer [defroutes GET POST PATCH]]
             [compojure.route :as route]
             [compojure.coercions :refer [as-int]]
@@ -24,6 +25,7 @@
   (GET   "/login"         req                 (p/login-page req))
   (POST  "/login"         req                 (login/handler req))
   (GET   "/logout"        req                 (login/wipe-session))
+  (GET   "/info"          req                 (p/change-account-info req))
   (PATCH "/info"          req                 (settings/handler req))
   (GET   "/pics/:uuid"    [uuid]              (gallery/get-image uuid)) ;; as-uuid here
   (GET   "/gallery/:user" req                 (gallery/get-user-gallery req))
@@ -39,6 +41,9 @@
 
 (def app
   (-> app-routes
+      (wrap-cors :access-control-allow-origin [#"http://10.11.11.8:3000"]
+                 :access-control-allow-methods [:get :put :post :patch]
+                 :access-control-allow-credentials "true")
       (wrap-defaults (-> site-defaults
                          (assoc-in [:session :store]
                                    (cookie-store {:key key/store-key}))

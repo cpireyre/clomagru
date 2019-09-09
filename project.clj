@@ -21,7 +21,7 @@
                  [com.draines/postal "2.0.3"]
                  [com.bhauman/figwheel-main "0.2.3"]
                  [com.bhauman/rebel-readline-cljs "0.1.4"]]
-  :resource-paths ["src-cljs" "resources" "target"]
+  :resource-paths ["src-cljs" "cljs-out" "resources" "target"]
   :aliases {"fig" ["trampoline" "run" "-m" "figwheel.main"]
             "build-dev" ["trampoline" "run" "-m" "figwheel.main"
                          "-b" "dev" "-r"]}
@@ -32,7 +32,7 @@
   :plugins [[lein-cljsbuild "1.1.7"]]
   :cljsbuild {:builds [{:source-paths ["src-cljs"]
                         :compiler {:output-dir  "resources/public/goog"
-                                   :output-to   "resources/public/app.js"
+                                   :output-to   "resources/public/cljs-out/dev-main.js"
                                    :pretty-print true
                                    :asset-path  "goog"
                                    :main "clomagru-cljs.core"}}]})

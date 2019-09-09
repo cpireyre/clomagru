@@ -7,7 +7,10 @@
             [clomagru.login :as login]
             [clomagru.index :as index]))
 
-(defn nav-bar [{session :session}] (let [uuid     (:uuid session) username (db/get-username-by-uuid uuid)] [:nav
+(defn nav-bar [{session :session}]
+  (let [uuid (:uuid session)
+        username (db/get-username-by-uuid uuid)]
+    [:nav
      [:ul
       [:li [:strong [:a#sitename {:href "/"} "Clomagru"]]]
       (when username
@@ -16,7 +19,8 @@
          [:li [:a {:href "/camera"} "Take a photo"]]])
       [:li [:a {:href "/list"}   "See all users"]]
       (if uuid
-        [:li [:a {:href "/logout"}   "Log out"]]
+        '([:li [:a {:href "/info"}     "Settings"]]
+         [:li [:a {:href "/logout"}    "Log out"]])
         '([:li [:a {:href "/register"} "Sign up"]]
           [:li [:a {:href "/login"}    "Sign in"]]))]
      [:hr]]))
@@ -25,9 +29,11 @@
   [:footer
    [:hr]
    [:p "Powered by Clojure or whatever. "
-       "Illustrations by "
-       [:a {:href "https://absurd.design"} "absurd.design"]
-       "."]])
+    [:img {:style "all: initial;"
+           :src "https://www.vim.org/images/just_vim_it.gif" }]
+    "Illustrations by "
+    [:a {:href "https://absurd.design"} "absurd.design"]
+    "."]])
 
 (defn header [title & rest]
   [:head
@@ -96,7 +102,8 @@
   [:div
    [:h1 "Some recents pics."]
    [:div {:id "app"}]
-   [:script {:type "text/javascript" :src "cljs-out/dev-main.js"}]])
+   [:script {:type "text/javascript" :src "/cljs-out/dev-main.js"}]])
+    
 
 (defn accounts-list []
   (let [accounts (db/select-all-accounts)]
@@ -115,6 +122,55 @@
      [:p "You need to be logged in for that."]]))
 
 
+(defn change-info-form [uuid]
+  (form/form-to
+    [:patch "/info"]
+    [:fieldset
+     [:legend "Change your user information."]
+     [:label "Current username: "
+      (form/text-field
+        {:name     "username"
+         :pattern  "^[a-zA-Z0-9]+$"
+         :title    "Letters and numbers only."
+         :value    (db/get-username-by-uuid uuid)
+         :required true}
+        "username")] [:br]
+     [:label "Current password: "
+      (form/text-field 
+        {:name     "password"
+         :pattern  ".{7,}"
+         :title    "Seven characters or more."
+         :type     "password"
+         :required true}
+        "password")] [:hr]
+     [:label "New username? " (form/text-field
+                                {:name     "username"
+                                 :pattern  "^[a-zA-Z0-9]+$"
+                                 :title    "Letters and numbers only."
+                                 :required true}
+                                "new-username")] [:br]
+     [:label "New password? " (form/text-field
+                                {:name     "password"
+                                 :pattern  ".{7,}"
+                                 :title    "Seven characters or more."
+                                 :type     "password"
+                                 :required true}
+                                "new-password")] [:br]
+     [:label "New e-mail? " (form/text-field
+                              {:name "email"
+                               :type "email"}
+                              "new-email")] [:br]
+     (form/submit-button "Submit")]))
+
+(defn settings-page [{session :session}]
+  (if-let [uuid (:uuid session)]
+    [:section
+     [:h1 "Manage your account."]
+     (change-info-form uuid)
+     [:p [:img {:src "/assets/10.png"
+                :width "500px"
+                :height "500px"}]]]
+    (str "need to be logged in for that")))
 (def not-found
   [:section
   [:h1 "404"]
@@ -152,9 +208,11 @@
                (register-component req)
                [:br]
                [:p [:img {:src "/assets/01.png"
-                          :width "500px;"
-                          :height "500px;"}]]))
+                          :width "500px"
+                          :height "500px"}]]))
 (defn index-page [req]
   (render-page req "Welcome to Clomagru!" (index-gallery)))
+(defn change-account-info [req]
+  (render-page req "Account settings." (settings-page req)))
 (defn not-found-page []
   (html5 (header "404 not found.") [:main not-found] footer))

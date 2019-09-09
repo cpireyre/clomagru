@@ -2,12 +2,19 @@
   (:require [hiccup.form :as form]
             [next.jdbc.sql :as sql]
             [crypto.password.pbkdf2 :as password]
-            [ring.util.response :refer [response status content-type]]
+            [ring.util.response :refer [response redirect status content-type]]
             [clomagru.db :as db]
             [clomagru.users :as users]
             [clomagru.initdb :refer [ds]]
             [clomagru.gallery :refer [transit-str]]
             [clomagru.log :refer [timelog-stdin]]))
+
+(defn dissoc-empty
+  "Strips a map of empty entries. Map must only contain
+  things on which empty? doesn't throw exception I guess."
+  [m]
+  (apply dissoc m
+         (for [[k v] m :when (empty? v)] k)))
 
 (defn update-user! [user-uuid params]
   (let [old-username (:username params)
@@ -22,6 +29,7 @@
                   :email    new-email
                   :password hash}
                  {:id user-uuid})
+    (timelog-stdin old-username old-email "became" new-username new-email)
     {:username new-username :email new-email}))
 
 (defn name-or-email-in-db? [{username :new-username email :new-email}]
@@ -45,16 +53,19 @@
           (-> data
               (transit-str)
               (response)
-              (content-type "application/json")))))
+              (content-type "application/json"))
+          :else (redirect "/"))))
 
 (defn handler [{params :params headers :headers}]
-  (if (and (users/valid-patch-request? params)
-           (not (name-or-email-in-db? params)))
-    (if-let [user-uuid (db/match-credentials params)]
-      (make-response (update-user! user-uuid params) headers)
-      (-> (response "Credentials did not match.")
+  (let [input (dissoc-empty params)]
+    (if (and (users/valid-patch-request? input)
+             (not (name-or-email-in-db? input)))
+      (if-let [user-uuid (db/match-credentials input)]
+        (make-response (update-user! user-uuid input) headers)
+        (-> (response "Credentials did not match.")
+            (content-type "text/plain")
+            (status 401)))
+      (-> (response (str request-format-description input))
           (content-type "text/plain")
-          (status 401)))
-    (-> (response request-format-description)
-        (content-type "text/plain")
-        (status 400))))
+          (status 400)))))
+
