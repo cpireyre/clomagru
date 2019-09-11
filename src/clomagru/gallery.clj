@@ -66,4 +66,5 @@
         pics (db/five-pics-from-offset page-offset)]
     (-> (transit-str pics)
         (ok)
+        (header "Access-Control-Allow-Credentials" "true")
         (content-type "text/plain"))))
