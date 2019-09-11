@@ -29,8 +29,9 @@
   [:footer
    [:hr]
    [:p "Powered by Clojure or whatever. "
-    [:img {:style "all: initial;"
-           :src "https://www.vim.org/images/just_vim_it.gif" }]
+    [:a {:href "https://www.vim.org"}
+     [:img {:style "all: initial;"
+            :src "https://www.vim.org/images/just_vim_it.gif" }]]
     "Illustrations by "
     [:a {:href "https://absurd.design"} "absurd.design"]
     "."]])

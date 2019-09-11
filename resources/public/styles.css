@@ -95,15 +95,14 @@ nav {
 nav>ul {
   display: flex;
   justify-content: space-evenly;
+  display: -webkit-box;
+  -webkit-box-pack: center; /* justify-content */
+  -webkit-box-align: center; /* align-items */
 }
 
-
-#sitename {
-  color: ;
-}
-
-#sitename:hover {
-  color: ;
+nav>ul>li {
+  margin-left: 1em;
+  margin-right: 1em;
 }
 
 /*  Forms style. */
