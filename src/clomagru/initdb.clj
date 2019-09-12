@@ -33,6 +33,7 @@
                               owner TEXT NOT NULL,
                               type TEXT NOT NULL,
                               data BLOB,
+                              likes INTEGER,
                               created_at INTEGER NOT NULL )"]))
 
 ;;  The token thing is made of very unsophisticated raw UUIDs,
@@ -46,6 +47,14 @@
                              token TEXT UNIQUE NOT NULL,
                              owner TEXT UNIQUE NOT NULL,
                              created_at INTEGER NOT NULL )"]))
+
+;;  I'm not a fan of this. But seems best under SQL design constraints?
+(defn create-likes-table! [datasource]
+  (log/timelog-stdin "Creating likes table in database.")
+  (jdbc/execute! datasource ["CREATE TABLE likes (
+                              id INTEGER PRIMARY KEY,
+                              liker_uuid TEXT NOT NULL,
+                              pic_uuid TEXT NOT NULL ) "]))
 
 (defn create-comments-table! [datasource]
   (log/timelog-stdin "Creating comments table in database.")
@@ -64,6 +73,7 @@
       (create-tokens-table! datasource)
       (create-accounts-table! datasource)
       (create-comments-table! datasource)
+      (create-likes-table! datasource)
       datasource)
     (jdbc/get-datasource database)))
 
