@@ -25,7 +25,8 @@
 (defn confirmation-email [username token]
   (str "Henlo, " username ".\n"
        "You may want to visit this address:\n"
-       "\thttp://localhost:3000/confirm/" token))
+       "\thttp://localhost:3000/confirm/" token
+       "\nIf you don't know what this e-mail is about, just delete it."))
 
 (defn send-confirm-email!
   "Sends an email to the user containing the account confirmation link."
