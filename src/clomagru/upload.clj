@@ -1,6 +1,6 @@
 (ns clomagru.upload
   (:require [clomagru.db :as db]
-            [ring.util.response :refer [content-type response redirect]])
+            [ring.util.response :refer :all])
   (:import [java.io ByteArrayOutputStream FileInputStream]))
 
 (defn file->byte-array [x]
@@ -18,9 +18,11 @@
           content-type (:content-type file-info)]
       (when (or (= content-type "image/png")
                 (= content-type "image/jpeg"))
-        (db/save-file! {:owner-uuid owner-uuid
-                        :type       content-type
-                        :data       (file->byte-array tempfile)}))
-      (let [username (db/get-username-by-uuid owner-uuid)]
-        (-> (redirect (str "/gallery/" username)))))
+        (let [username (db/get-username-by-uuid owner-uuid)
+              pic-uuid (db/save-file! {:owner-uuid owner-uuid
+                                       :type       content-type
+                                       :data       (file->byte-array tempfile)})]
+          (-> (redirect (str "/gallery/" username))
+              (status 201)
+              (header "Location" (str "/pics/" pic-uuid))))))
     (-> (redirect "/"))))
