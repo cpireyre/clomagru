@@ -59,13 +59,12 @@
   (log/timelog-stdin "Confirming user" owner)
   (sql/update! ds :accounts {:confirmed 1} {:id owner}))
 
-(defn confirm-account! [token]
-  (if (re-find uuid-regex token)
+(defn confirm-account! [token-uuid]
+  (let [token (.toString token-uuid)]
     (if-let [owner (get-owner-by-token token)]
       (do
         (log/timelog-stdin "Processing token" token)
         (confirm-in-db! owner)
         (delete-token! token)
         (redirect "/"))
-      (redirect "/404"))
-    (redirect "/invalid-token")))
+      (redirect "/404"))))

@@ -34,9 +34,9 @@
        "</pre>"))
 
 (defn destructure-form-input [form-params]
-  {:username  (get form-params "username")
-   :email     (get form-params "email")
-   :password  (get form-params "password")})
+  {:username  (:username form-params)
+   :email     (:email form-params)
+   :password  (:password form-params)})
 
 (defn alnum? [s]
   (boolean (re-matches #"^[\w]+$" s)))
