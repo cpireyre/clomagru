@@ -49,11 +49,11 @@
               (str)
               (response)
               (content-type "text/plain"))
-          (= accept-type "application/json")
+          (= accept-type "application/transit")
           (-> data
               (transit-str)
               (response)
-              (content-type "application/json"))
+              (content-type "application/transit"))
           :else (redirect "/"))))
 
 (defn handler [{params :params headers :headers}]
