@@ -19,14 +19,12 @@
     false))
 
 (defn get-image [uuid]
-  (if (string-uuid? uuid)
-    (if-let [picc (db/get-image uuid)]
-      (let [picdata (:files/data picc)
-            pictype (:files/type picc)]
-        (-> (ByteArrayInputStream. picdata)
-            (ok)
-            (content-type pictype)))
-      (redirect "/404"))
+  (if-let [picc (db/get-image (.toString uuid))]
+    (let [picdata (:files/data picc)
+          pictype (:files/type picc)]
+      (-> (ByteArrayInputStream. picdata)
+          (ok)
+          (content-type pictype)))
     (redirect "/404")))
 
 (defn one-image [url]
