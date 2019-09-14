@@ -245,3 +245,8 @@ main>section>article {
   margin-left: 3em;
   position: absolute;
 }
+
+small:hover {
+  color: red;
+  cursor: pointer;
+}
