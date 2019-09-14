@@ -18,15 +18,27 @@
     true
     false))
 
-(defn get-image [uuid]
-  (if (string-uuid? uuid)
-    (if-let [picc (db/get-image uuid)]
-      (let [picdata (:files/data picc)
-            pictype (:files/type picc)]
-        (-> (ByteArrayInputStream. picdata)
-            (ok)
-            (content-type pictype)))
-      (redirect "/404"))
+(defn transit-str [data]
+  (let [out (ByteArrayOutputStream. 4096)
+        writer (transit/writer out :json)]
+    (transit/write writer data)
+    (.toString out)))
+
+(defn make-response [h picc]
+  (if (= (get h "accept") "application/transit")
+    (-> picc
+        (dissoc :files/data)
+        (assoc :files/self (str "/pics/" (:files/id picc)))
+        (transit-str))
+    (let [picdata (:files/data picc)
+          pictype (:files/type picc)]
+      (-> (ByteArrayInputStream. picdata)
+          (ok)
+          (content-type pictype)))))
+
+(defn get-image [r uuid]
+  (if-let [picc (db/get-image (.toString uuid))]
+    (make-response (:headers r) picc)
     (redirect "/404")))
 
 (defn one-image [url]
@@ -53,12 +65,6 @@
         (user-gallery user-uuid req)
         (str "looks like " route-name " ain't home")) ;; TODO: Use flash here.
       (str "no one's called that round here")))) ;; TODO: Use flash here.
-
-(defn transit-str [data]
-  (let [out (ByteArrayOutputStream. 4096)
-        writer (transit/writer out :json)]
-    (transit/write writer data)
-    (.toString out)))
 
 (defn get-gallery-page [page]
   (let [num (max page 1)  ;; no negative offset shenanigans

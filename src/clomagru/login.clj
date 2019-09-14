@@ -20,8 +20,10 @@
         (str "Please confirm your e-mail address.")) ;; TODO: Use flash here.
       (str "Could not find this account or password didn't match.")))) ;; TODO: Use flash here.
 
+;; TODO: clean up this route to make it more RESTful depending
+;; on user-agent.
 (defn make-account-handler [req]
-  (db/make-account (:form-params req))
+  (db/make-account (:params req))
   (redirect "/login"))
 
 (defn wipe-session []
