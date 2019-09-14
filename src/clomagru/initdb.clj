@@ -33,7 +33,7 @@
                               owner TEXT NOT NULL,
                               type TEXT NOT NULL,
                               data BLOB,
-                              likes INTEGER,
+                              likes INTEGER DEFAULT 0,
                               created_at INTEGER NOT NULL )"]))
 
 ;;  The token thing is made of very unsophisticated raw UUIDs,

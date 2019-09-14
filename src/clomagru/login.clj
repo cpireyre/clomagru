@@ -24,7 +24,7 @@
   (db/make-account (:form-params req))
   (redirect "/login"))
 
-(defn  wipe-session []
+(defn wipe-session []
   (-> (redirect "/")
       (assoc :session nil)))
 

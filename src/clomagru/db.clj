@@ -84,7 +84,8 @@
                             :owner      owner-uuid
                             :type       type
                             :data       data
-                            :created_at now})))
+                            :created_at now})
+    id))
 
 (defn get-image [uuid]
   (sql/get-by-id ds :files uuid))
@@ -132,7 +133,7 @@
                0 16)))
 
 (defn five-pics-from-offset [offset]
-  (let [pics (sql/query ds [(str "select id, owner, created_at "
+  (let [pics (sql/query ds [(str "select id, likes, owner, created_at "
                                  "from files order by created_at desc "
                                  "limit 5 offset "
                                  offset)])]

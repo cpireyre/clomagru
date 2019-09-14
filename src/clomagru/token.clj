@@ -35,10 +35,8 @@
                     "Clomagru: confirm your registration."
                     (confirmation-email username token)))
 
-
 (defonce uuid-regex
   #"^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$")
-
 
 (defn get-owner-by-token [token]
   (-> (sql/query ds ["select owner from tokens where token = ?" token])

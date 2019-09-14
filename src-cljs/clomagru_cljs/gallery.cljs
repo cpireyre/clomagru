@@ -52,7 +52,9 @@
   [:div {:class "column"}
    [:p [:strong (:files/username pic-map)]]
    (img-tag (:files/id pic-map))
-   [:p [:time (:files/date pic-map)]]])
+   [:p {:style {:display "flex" :justify-content "space-evenly"}}
+    [:small (:files/likes pic-map) " ♥"]
+    [:time (:files/date pic-map)]]])
 
 (defn card [pic-map chan]
   (let [pic-uuid (:files/id pic-map)]
