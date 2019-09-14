@@ -48,7 +48,7 @@
 
 
 (defn make-cards [state chan]
-  (map #(index/card % chan) @state))
+ (doall (map #(index/card % chan) @state)))
 
 (defn get-map-to-update [map to-update]
   (first (filter #(= % to-update) map)))

@@ -48,16 +48,34 @@
     ^{:key (gensym comment-map)}
     [:li [:strong poster]  [:span comment]]))
 
+(defn like-pic! [pic-id likes-atom]
+  (go
+    (let [response
+          (<! (http/patch (str "http://localhost:3000/pics/" pic-id)))
+          status (:status response)]
+      (cond
+        ; (= status 403) (swap! likes-atom dec) ;; need to dec in backend
+        (= status 200) (swap! likes-atom inc)))))
+
+(defn likes-component [pic-map]
+  (let [likes (r/atom (:files/likes pic-map))]
+    (fn []
+      [:small
+       {:on-click
+        #(like-pic! (:files/id pic-map) likes)} ;; needs visual feedback
+       @likes " ♥"])))
+
 (defn pic [pic-map]
   [:div {:class "column"}
    [:p [:strong (:files/username pic-map)]]
    (img-tag (:files/id pic-map))
    [:p {:style {:display "flex" :justify-content "space-evenly"}}
-    [:small (:files/likes pic-map) " ♥"]
+    [likes-component pic-map]
     [:time (:files/date pic-map)]]])
 
 (defn card [pic-map chan]
-  (let [pic-uuid (:files/id pic-map)]
+  (let [pic-uuid (:files/id pic-map)
+        likes-atom (r/atom (:files/likes pic-map))]
     ^{:key pic-uuid}
     [:article {:class "card"}
      (pic pic-map)

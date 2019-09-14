@@ -46,7 +46,7 @@
 
 (def app
   (-> app-routes
-      (wrap-cors :access-control-allow-origin [#"http://localhost:3000"]
+      (wrap-cors :access-control-allow-origin [#".*"] ;; very unsafe
                  :access-control-allow-methods [:get :put :post :patch]
                  :access-control-allow-credentials "true")
       (wrap-defaults (-> site-defaults

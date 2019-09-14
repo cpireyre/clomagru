@@ -76,5 +76,6 @@
           (-> (response/response (str liker " liked " pic-uuid))
               (response/header "Location:" (str "/pics/" pic-uuid))
               (response/content-type "text/plain")))
-        unauthorized))
+        (-> (response/response "Dislike")
+            (response/status 403))))
     unauthorized))
