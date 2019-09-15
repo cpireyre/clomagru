@@ -65,3 +65,6 @@
 
 (defn valid-patch-request? [req]
   (s/valid? ::patch-request req))
+
+(defn example-pw []
+  (first (first (s/exercise ::password))))
