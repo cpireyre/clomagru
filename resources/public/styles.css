@@ -26,7 +26,7 @@
 /* nord15: #b48ead; */
 
 /*  General style. */
-/* TODO: Put back selection style. */
+
 body {
   background-color: white;
   color: #2e3440;
@@ -72,7 +72,8 @@ a:hover {
 }
 
 ::selection {
-  background-color: ;
+  background-color: #8fbcbb;
+  color: #2e3440;
 }
 
 hr {
