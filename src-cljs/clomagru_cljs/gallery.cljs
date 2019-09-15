@@ -52,10 +52,12 @@
   (go
     (let [response
           (<! (http/patch (str "http://localhost:3000/pics/" pic-id)))
-          status (:status response)]
+          status (:status response)
+          body (:body response)]
+      (prn body)
       (cond
-        ; (= status 403) (swap! likes-atom dec) ;; need to dec in backend
-        (= status 200) (swap! likes-atom inc)))))
+        (= body "-") (swap! likes-atom dec) ;; need to dec in backend
+        (= body "+") (swap! likes-atom inc)))))
 
 (defn likes-component [pic-map]
   (let [likes (r/atom (:files/likes pic-map))]

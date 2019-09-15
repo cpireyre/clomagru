@@ -28,11 +28,6 @@
   (and (string-uuid? liker-uuid)
        (db/get-username-by-uuid liker-uuid)
        (string-uuid? pic-uuid)
-       (empty? 
-         (sql/query ds
-                    ["select * from likes where liker_uuid = ? and pic_uuid = ?"
-                     liker-uuid
-                     pic-uuid]))
        (db/get-image pic-uuid)))
 
 ;; how to sanitize comment text?
@@ -63,19 +58,42 @@
 
 (defn user-like! [ds liker-id pic-id]
   (sql/insert! ds :likes {:liker_uuid liker-id :pic_uuid pic-id})
-  (jdbc/execute-one! ds ["UPDATE files SET likes = likes + 1 WHERE id = ?" pic-id]))
+  (log/timelog-stdin liker-id "liked" pic-id)
+  (jdbc/execute-one!
+    ds
+    ["UPDATE files SET likes = likes + 1 WHERE id = ?" pic-id]))
+
+(defn user-unlike! [ds liker-id pic-id]
+  (sql/delete! ds :likes {:liker_uuid liker-id :pic_uuid pic-id})
+  (log/timelog-stdin liker-id "UNliked" pic-id)
+  (jdbc/execute-one!
+    ds
+    ["UPDATE files SET likes = likes - 1 WHERE id = ?" pic-id]))
+
+(defn already-liked?
+  "Cross-references a user id and pic id to see if said user likes said pic."
+  [ds liker-uuid pic-uuid]
+  (seq
+    (sql/query ds
+               ["select * from likes where liker_uuid = ? and pic_uuid = ?"
+                liker-uuid
+                pic-uuid])))
 
 (defn like [r id]
   (if (not (nil? (get-in r [:session :uuid])))
-    (let [liker (.toString (get-in r [:session :uuid]))
+    (let [liker    (.toString (get-in r [:session :uuid]))
           pic-uuid (.toString id)]
       (if (can-like? liker pic-uuid)
-        (do
-          (log/timelog-stdin liker "liked" pic-uuid)
-          (user-like! ds liker pic-uuid)
-          (-> (response/response (str liker " liked " pic-uuid))
-              (response/header "Location:" (str "/pics/" pic-uuid))
-              (response/content-type "text/plain")))
-        (-> (response/response "Dislike")
-            (response/status 403))))
+        (if (already-liked? ds liker pic-uuid)
+          (do
+            (user-unlike! ds liker pic-uuid)
+            (-> (response/response "-")
+                (response/header "Location:" (str "/pics/" pic-uuid))
+                (response/content-type "text/plain")))
+          (do
+            (user-like! ds liker pic-uuid)
+            (-> (response/response "+")
+                (response/header "Location:" (str "/pics/" pic-uuid))
+                (response/content-type "text/plain"))))
+        unauthorized))
     unauthorized))
