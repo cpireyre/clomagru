@@ -48,6 +48,14 @@
                              owner TEXT UNIQUE NOT NULL,
                              created_at INTEGER NOT NULL )"]))
 
+(defn create-pwtokens-table! [datasource]
+  (log/timelog-stdin "Creating password reset tokens table in database.")
+  (jdbc/execute! datasource ["CREATE TABLE pwtokens  (
+                              id INTEGER PRIMARY KEY,
+                              token TEXT UNIQUE NOT NULL,
+                              owner TEXT UNIQUE NOT NULL,
+                              created_at INTEGER NOT NULL )"]))
+
 ;;  I'm not a fan of this. But seems best under SQL design constraints?
 (defn create-likes-table! [datasource]
   (log/timelog-stdin "Creating likes table in database.")
@@ -71,6 +79,7 @@
     (let [datasource (jdbc/get-datasource database)]
       (create-files-table! datasource)
       (create-tokens-table! datasource)
+      (create-pwtokens-table! datasource)
       (create-accounts-table! datasource)
       (create-comments-table! datasource)
       (create-likes-table! datasource)

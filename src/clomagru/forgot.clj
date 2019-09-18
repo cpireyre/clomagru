@@ -4,13 +4,15 @@
             [clomagru.log :refer [timelog-stdin]]
             [clomagru.db :as db]
             [clomagru.users :refer [example-pw]]
+            [ring.util.response :as response]
             [next.jdbc.sql :as sql]))
 
 (defn forgot-password-mail [username token]
   (str "Henlo, " username ".\n"
        "If you've forgotten your Clomagru password, "
        "you may reset it here:\n"
-       "TBD " token))
+       "TBD " token
+       "\nIf you don't know what this e-mail is about, just delete it."))
 
 (defn send-forgot-email! [email username token]
   (email/send-mail! email
@@ -61,7 +63,7 @@
     (insert-token! ds tok)
     (send-forgot-email! email username tok-str)))
 
-;; TODO: check error pre conditions, verify token, reset password, add handler.
+;; TODO: check error pre conditions, add handler.
 
 (defn confirm-token!
   "Takes a datasource and token map, finds the corresponding user,
@@ -74,3 +76,33 @@
     {:password encrypted-new-pw}
     {:id (:pwtokens/owner tok)})
   (sql/delete! ds :pwtokens {:id (:pwtokens/id tok)}))
+
+(defn get-user-token [owner-id]
+  (sql/find-by-keys
+    ds
+    :pwtokens
+    {:owner owner-id}))
+
+(defn prep-request
+  "Takes a request map and returns the user map if they are
+  in a position to change their password, otherwise nil.
+  The account must exist and be confirmed, and there must not be any pending
+  tokens for this user."
+  [req]
+  (let [name-req (get-in req [:params :username])]
+    (when-let
+      [account (first (sql/find-by-keys ds :accounts {:username name-req}))]
+      (when (and (= 1 (get account :accounts/confirmed))
+                 (empty? (get-user-token (:accounts/id account))))
+        account))))
+
+(defn handler!
+  "Takes a username and initiates the password reset procedure, if applicable."
+  [req]
+  (if-let [account (prep-request req)]
+    (do
+      (forgot-pw! account)
+      (-> (response/response "Sent token.")
+          (response/status 202)))
+    (-> (response/response "There was an error which I can't be bothered to specify at this time.")
+        (response/status 401))))
