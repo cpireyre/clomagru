@@ -5,13 +5,14 @@
             [clomagru.db :as db]
             [clomagru.users :refer [example-pw]]
             [ring.util.response :as response]
-            [next.jdbc.sql :as sql]))
+            [next.jdbc.sql :as sql]
+            [crypto.password.pbkdf2 :as password]))
 
 (defn forgot-password-mail [username token]
   (str "Henlo, " username ".\n"
        "If you've forgotten your Clomagru password, "
        "you may reset it here:\n"
-       "TBD " token
+       "http://localhost:3000/reset/" token
        "\nIf you don't know what this e-mail is about, just delete it."))
 
 (defn send-forgot-email! [email username token]
@@ -97,7 +98,7 @@
         account))))
 
 (defn handler!
-  "Takes a username and initiates the password reset procedure, if applicable."
+  "Takes a request and initiates the password reset procedure, if applicable."
   [req]
   (if-let [account (prep-request req)]
     (do
@@ -106,3 +107,18 @@
           (response/status 202)))
     (-> (response/response "There was an error which I can't be bothered to specify at this time.")
         (response/status 401))))
+
+(defn reset-pw-handler!
+  "Takes a token UUID and resets the user's password, if possible."
+  [tok]
+  (if-let [token-map (get-token ds tok)]
+    (let [pw (example-pw)
+          hash (password/encrypt pw)]
+      (confirm-token! ds token-map hash)
+      (-> (response/response (str "Success! You may now log in using "
+                                  "this password: " pw
+                                  "\nMake sure to change it swiftly."))
+          (response/content-type "text/plain")))
+    (-> (response/response "Could not find this token.")
+        (response/content-type "text/plain")
+        (response/status 404))))

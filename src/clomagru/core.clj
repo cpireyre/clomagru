@@ -44,6 +44,7 @@
   (POST  "/pics"          req                    (upload/save-image! req))
   (POST  "/comment-picc"  req                    (comment/post-comment! req))
   (POST  "/reset"         req                    (forgot/handler! req))
+  (GET   "/reset/:tok"    [tok :<< as-uuid]      (forgot/reset-pw-handler! tok))
   (route/not-found                               (p/not-found-page)))
 
 (def app
