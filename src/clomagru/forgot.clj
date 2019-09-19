@@ -104,6 +104,7 @@
     (do
       (forgot-pw! account)
       (-> (response/response "Sent token.")
+          (response/content-type "text/plain")
           (response/status 202)))
     (-> (response/response "There was an error which I can't be bothered to specify at this time.")
         (response/status 401))))

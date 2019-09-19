@@ -128,6 +128,17 @@ fieldset {
   box-shadow: rgba(184, 194, 215, 0.65) 3px 3px 9px 0px;
 }
 
+#forgot-button {
+  border: 0;
+  background-color: #fafafa;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+#forgot-button:hover {
+  color: black;
+}
+
 /*  Footer style. */
 
 body {
