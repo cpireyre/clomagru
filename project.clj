@@ -31,14 +31,14 @@
   :profiles {:uberjar {:aot :all}
              :dev {:dependencies [[cider/piggieback "0.4.1"]
                                   [figwheel-sidecar "0.5.16"]]
-                   :source-paths ["src-cljs"]
+                   :source-paths ["src-cljs" "camera"]
                    :repl-options {:nrepl-middleware
                                   [cider.piggieback/wrap-cljs-repl]}}}
   :plugins [[lein-cljsbuild "1.1.7"]]
   :cljsbuild
   {:builds
    [{:id "dev"
-     :source-paths ["src-cljs"]
+     :source-paths ["src-cljs" "camera"]
      :compiler {:output-dir  "resources/public/goog"
                 :output-to   "resources/public/cljs-out/dev-main.js"
                 :pretty-print true
