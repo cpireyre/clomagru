@@ -120,6 +120,8 @@
   (if (get-in req [:session :uuid])
     [:section
      [:h1 "Look alive!"]
+     [:div {:id "app"}]
+     [:script {:type "text/javascript" :src "/cljs-out/dev-main-camera.js"}]
      pic-upload-form]
     [:section
      [:p "You need to be logged in for that."]]))
