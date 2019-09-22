@@ -40,6 +40,7 @@
 (defn img-tag [pic-uuid]
   ^{:key pic-uuid}
   [:img {:id (gensym pic-uuid)
+         :class "card"
          :src (str "/pics/" pic-uuid)}])
 
 (defn print-comment [comment-map]

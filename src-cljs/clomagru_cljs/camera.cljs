@@ -38,16 +38,18 @@
   [:div
    [:canvas#canvas {:style {:display "none"}}]])
 
-(defn send-webcam-pic-form []
+(defn send-webcam-pic-form [pic]
   (let [canvas (js/document.getElementById "canvas")]
-    [:button "Submit this photo."]))
+    [:form {:action "/pics/cam"
+            :method "post"}
+     [:button "Submit this photo."]]))
 
 (defn display-pics [pics]
   [:section {:id "previews"}
    [:h3 "Previous photos"]
    [:ul 
     (for [data pics]
-      [:li
+      ^{:key (gensym data)} [:li
        [:img {:src data
               :alt "Previous photo"
               :class "preview"}]])]])
@@ -57,11 +59,13 @@
    (camera)
    (canvas)
    (when (seq @state)
-     [:div
-      [:img {:alt "Current photo"
-             :src (first @state)}]
-      [:br]
-      (send-webcam-pic-form)
+     [:section 
+      [:div {:id "currentpic"}
+       [:img {:alt "Current photo"
+              :src (first @state)}]
+       [:br]
+       (send-webcam-pic-form (first @state))
+       ]
      [:br]
      (display-pics (rest @state))])])
 
