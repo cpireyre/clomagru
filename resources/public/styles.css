@@ -35,7 +35,7 @@ body {
   text-align: center;
 }
 
-h1 {
+h1, h3 {
   color: #4c566a;
 }
 
@@ -261,4 +261,28 @@ main>section>article {
 small:hover {
   color: red;
   cursor: pointer;
+}
+
+/*  Camera page style. */
+
+#camera {
+  display: flex;
+  justify-content: space-between;
+  margin-left: 16vw;
+  max-width: 67vw;
+}
+
+#previews {
+  min-width: 30vw;
+  max-height: 50vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  background-color: #eceff4;
+  box-shadow: rgba(184, 194, 215, 0.65) 3px 3px 9px 0px;
+  margin: 1vh 1vw 1vh 1vw;
+}
+
+img.preview {
+  width: 160px;
+  height: 120px;
 }

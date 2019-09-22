@@ -1,20 +1,19 @@
 (ns clomagru-cljs.camera
   (:require [reagent.core :as r]))
 
-(defn take-picture! [video canvas photo]
+(defonce state (r/atom '()))
+
+(defn take-picture! [video canvas]
   (let [context (.getContext canvas "2d")]
     (.drawImage context video 0 0 320 240)
     (let [data (.toDataURL canvas "image/png")]
-      (set! (.-src photo) data)
-      (set! (.-style photo)
-            "display: initial; width: 320px; height: 240px;"))))
+      (swap! state #(conj % data)))))
 
 (defn startup! []
   (let [video       (js/document.getElementById "video")
         width 320
         height 240
         canvas      (js/document.getElementById "canvas")
-        photo       (js/document.getElementById "photo")
         startbutton (js/document.getElementById "startbutton")]
     (-> (js/navigator.mediaDevices.getUserMedia
           (js-obj "video" true "audio" false))
@@ -25,27 +24,46 @@
     (set! (.-width canvas) width)
     (set! (.-height canvas) height)
     (.addEventListener startbutton "click"
-                       #(take-picture! video canvas photo))))
+                       #(take-picture! video canvas))))
 
 (defn camera []
   [:div {:class "camera"}
    [:video#video "No video available at this time."]
    [:br]
-   [:button#startbutton "Take picc."]])
+   [:button#startbutton
+    {:style {:margin-bottom "1em"}}
+    "Take picc."]])
 
 (defn canvas []
   [:div
-   [:canvas#canvas {:style {:display "none"}}]
-   [:div {:class "output"}
-    [:img#photo {:alt "Screen capture goes here."
-                 :style {:width 320 :height 240
-                         :border "3px solid red"
-                         :display "none"}}]]])
+   [:canvas#canvas {:style {:display "none"}}]])
+
+(defn send-webcam-pic-form []
+  (let [canvas (js/document.getElementById "canvas")]
+    [:button "Submit this photo."]))
+
+(defn display-pics [pics]
+  [:section {:id "previews"}
+   [:h3 "Previous photos"]
+   [:ul 
+    (for [data pics]
+      [:li
+       [:img {:src data
+              :alt "Previous photo"
+              :class "preview"}]])]])
 
 (defn page []
-  [:section
+  [:section#camera 
    (camera)
-   (canvas)])
+   (canvas)
+   (when (seq @state)
+     [:div
+      [:img {:alt "Current photo"
+             :src (first @state)}]
+      [:br]
+      (send-webcam-pic-form)
+     [:br]
+     (display-pics (rest @state))])])
 
 (r/render [page]
           (js/document.getElementById "app"))
