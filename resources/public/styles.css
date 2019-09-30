@@ -35,11 +35,10 @@ body {
   text-align: center;
 }
 
-h1 {
+h1, h3 {
   color: #4c566a;
 }
-
-img {
+img.card {
   height: 250px;
   width: 250px;
   object-fit: cover;
@@ -126,6 +125,17 @@ fieldset {
   display: inline-block;
   text-align: right;
   box-shadow: rgba(184, 194, 215, 0.65) 3px 3px 9px 0px;
+}
+
+#forgot-button {
+  border: 0;
+  background-color: #fafafa;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+#forgot-button:hover {
+  color: black;
 }
 
 /*  Footer style. */
@@ -250,4 +260,47 @@ main>section>article {
 small:hover {
   color: red;
   cursor: pointer;
+}
+
+/*  Camera page style. */
+
+#camera {
+  display: flex;
+  justify-content: space-between;
+  margin-left: 11vw;
+  margin-right: 11vw;
+  max-width: 73vw;
+}
+
+#previews {
+  background-color: #eceff4;
+  box-shadow: rgba(184, 194, 215, 0.65) 3px 3px 9px 0px;
+  min-width: 30vw;
+  max-height: 42vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  margin: 1vh 1vw 1vh 1vw;
+}
+
+.camera {
+  background-color: #eceff4;
+  box-shadow: rgba(184, 194, 215, 0.65) 3px 3px 9px 0px;
+  margin: 0vh 1vw 0vh 1vw;
+  max-height: 267px;
+  max-width: 30vw;
+  padding: 1em;
+}
+
+#currentpic {
+  background-color: #eceff4;
+  box-shadow: rgba(184, 194, 215, 0.65) 3px 3px 9px 0px;
+  max-width: 30vw;
+  margin: 0vh 1vw 0vh 1vw;
+  padding: 1em;
+}
+
+img.preview {
+  margin-bottom: 1.2vh;
+  height: 120px;
+  width: 160px;
 }

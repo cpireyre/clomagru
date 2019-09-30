@@ -91,8 +91,11 @@
     [:label "Account name: "
      (form/text-field {:required true} "username")] [:br]
     [:label "Password: "
-     (form/password-field {:required true} "password")] [:br]
-    (form/submit-button "Submit")]))
+     (form/password-field  "password")] [:br]
+    (form/submit-button "Submit")
+    [:br]
+    (form/submit-button {:id "forgot-button"
+                         :formaction "/reset"} "Forgot password?")]))
 
 (defn login-component [req]
   (if-let [username (db/get-username-by-uuid (get-in req [:session :uuid]))]
@@ -105,7 +108,6 @@
    [:div {:id "app"}]
    [:script {:type "text/javascript" :src "/cljs-out/dev-main.js"}]])
     
-
 (defn accounts-list []
   (let [accounts (db/select-all-accounts)]
     [:section
@@ -118,10 +120,11 @@
   (if (get-in req [:session :uuid])
     [:section
      [:h1 "Look alive!"]
+     [:div {:id "app"}]
+     [:script {:type "text/javascript" :src "/cljs-out/dev-main-camera.js"}]
      pic-upload-form]
     [:section
      [:p "You need to be logged in for that."]]))
-
 
 (defn change-info-form [uuid]
   (form/form-to
@@ -145,20 +148,18 @@
          :required true}
         "password")] [:hr]
      [:label "New username? " (form/text-field
-                                {:name     "username"
+                                {:name     "new-username"
                                  :pattern  "^[a-zA-Z0-9]+$"
-                                 :title    "Letters and numbers only."
-                                 :required true}
+                                 :title    "Letters and numbers only."}
                                 "new-username")] [:br]
      [:label "New password? " (form/text-field
-                                {:name     "password"
+                                {:name     "new-password"
                                  :pattern  ".{7,}"
                                  :title    "Seven characters or more."
-                                 :type     "password"
-                                 :required true}
+                                 :type     "password"}
                                 "new-password")] [:br]
      [:label "New e-mail? " (form/text-field
-                              {:name "email"
+                              {:name "new-email"
                                :type "email"}
                               "new-email")] [:br]
      (form/submit-button "Submit")]))

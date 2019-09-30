@@ -17,7 +17,8 @@
             [clomagru.key :as key]
             [clomagru.token :as token]
             [clomagru.comment :as comment]
-            [clomagru.accountsettings :as settings])
+            [clomagru.accountsettings :as settings]
+            [clomagru.forgot :as forgot])
   (:gen-class))
 
 (defroutes app-routes
@@ -41,7 +42,10 @@
   (POST  "/users"         req                    (login/make-account-handler req))
   (POST  "/upload-picc"   req                    (upload/save-image! req))
   (POST  "/pics"          req                    (upload/save-image! req))
+  (POST  "/pics/cam"      req                    (str req))
   (POST  "/comment-picc"  req                    (comment/post-comment! req))
+  (POST  "/reset"         req                    (forgot/handler! req))
+  (GET   "/reset/:tok"    [tok :<< as-uuid]      (forgot/reset-pw-handler! tok))
   (route/not-found                               (p/not-found-page)))
 
 (def app

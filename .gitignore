@@ -17,3 +17,5 @@ resources/public/goog
 src/clomagru/key.clj
 cookie.txt
 .rebel_readline_history
+*.DS_Store
+resources/public/cljs-out
