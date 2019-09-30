@@ -22,7 +22,5 @@
               pic-uuid (db/save-file! {:owner-uuid owner-uuid
                                        :type       content-type
                                        :data       (file->byte-array tempfile)})]
-          (-> (redirect (str "/gallery/" username))
-              (status 201)
-              (header "Location" (str "/pics/" pic-uuid))))))
+          (redirect (str "/gallery/" username)))))
     (-> (redirect "/"))))
